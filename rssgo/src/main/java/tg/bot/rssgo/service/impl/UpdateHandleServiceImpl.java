@@ -29,7 +29,7 @@ public class UpdateHandleServiceImpl {
                                 .filter(commandServices -> commandServices.isNeeded(tgUpdate))
                                 .findFirst()
                                 .map(commandServices -> commandServices.execute(tgUpdate))
-                                .orElse(new SendMessage(tgUpdate.getChatId(), "老弟，来了"));
+                                .orElse(new SendMessage(tgUpdate.getChatId(), "什么狗屁指令，老子不听"));
     }
 
     public void handle(TgUpdate tgUpdate){
