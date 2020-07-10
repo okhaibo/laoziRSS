@@ -12,5 +12,6 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * @since 2020-07-09
  */
 public interface ISourcesService extends IService<Sources> {
-
+    public void addUserCountById(Integer id);
+    public void delUserCountById(Integer id);
 }

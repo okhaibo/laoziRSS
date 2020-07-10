@@ -33,6 +33,8 @@ public class Sources implements Serializable {
 
     private Integer errorCount;
 
+    private Long userCount;
+
     private LocalDateTime createdAt;
 
     private LocalDateTime updatedAt;

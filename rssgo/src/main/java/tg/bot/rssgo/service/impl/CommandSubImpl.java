@@ -29,8 +29,6 @@ import java.util.Map;
 @Service
 public class CommandSubImpl implements ICommandService {
 
-    public static final String LINK_PATTERN = "^(http:\\/\\/www\\.|https:\\/\\/www\\.|http:\\/\\/|https:\\/\\/)?[a-z0-9]+([\\-\\.]{1}[a-z0-9]+)*\\.[a-z]{2,5}(:[0-9]{1,5})?(\\/.*)?$";
-
     @Autowired
     ISourcesService sourcesService;
     @Autowired
@@ -44,7 +42,7 @@ public class CommandSubImpl implements ICommandService {
 
         String text = update.getText();
         String link;
-        if (text.matches(LINK_PATTERN)){
+        if (text.matches(RssUtil.LINK_PATTERN)){
             link = text;
         }else if (text.length() < 6) {
             return new SendMessage(update.getChatId(), "快告诉老子要订阅什么网址");
@@ -53,12 +51,15 @@ public class CommandSubImpl implements ICommandService {
         }
 
         String resMsg;
-        if (link.matches(LINK_PATTERN)){
+        if (link.matches(RssUtil.LINK_PATTERN)){
             Sources source = sourcesService.getOne(Wrappers.<Sources>lambdaQuery().eq(Sources::getLink, link));
             if (source == null){
                 source = RssUtil.getSourceByLink(link);
                 sourcesService.save(source);
+            }else {
+                sourcesService.addUserCountById(source.getId());
             }
+
 
             Map<String,Object> map = new HashMap<>(2);
             map.put("chat_id",update.getChatId());
@@ -83,7 +84,8 @@ public class CommandSubImpl implements ICommandService {
             resMsg = "这是什么网址，老子不认识";
         }
 
-        return new SendMessage(update.getChatId(), resMsg).enableMarkdown(true);
+        return new SendMessage(update.getChatId(), resMsg).enableMarkdown(true)
+                                                          .disableWebPagePreview();
     }
 
     @Override
@@ -92,6 +94,6 @@ public class CommandSubImpl implements ICommandService {
         if (text.length() < 4) {
             return false;
         }
-        return text.substring(0,4).equals("/sub") || text.matches(LINK_PATTERN);
+        return text.substring(0,4).equals("/sub") || text.matches(RssUtil.LINK_PATTERN);
     }
 }

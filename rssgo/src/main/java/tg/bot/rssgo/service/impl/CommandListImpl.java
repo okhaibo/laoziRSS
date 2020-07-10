@@ -40,7 +40,8 @@ public class CommandListImpl implements ICommandService {
             i++;
         }
         return new SendMessage(tgUpdate.getChatId(), "老子的订阅列表如下：\n\n" + subs)
-                .enableMarkdown(true);
+                .enableMarkdown(true)
+                .disableWebPagePreview();
     }
 
     @Override

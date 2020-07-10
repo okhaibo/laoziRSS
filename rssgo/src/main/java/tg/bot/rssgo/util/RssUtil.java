@@ -21,6 +21,7 @@ import java.util.stream.Collectors;
  */
 @Slf4j
 public class RssUtil {
+    public static final String LINK_PATTERN = "^(http:\\/\\/www\\.|https:\\/\\/www\\.|http:\\/\\/|https:\\/\\/)?[a-z0-9]+([\\-\\.]{1}[a-z0-9]+)*\\.[a-z]{2,5}(:[0-9]{1,5})?(\\/.*)?$";
 
     public static ItemVO getLastestPost(String link){
         SyndFeed feed = getSyndFeed(link);
@@ -57,6 +58,7 @@ public class RssUtil {
         source.setTitle(feed.getTitle());
         source.setLink(feed.getLink());
         source.setErrorCount(0);
+        source.setUserCount(1l);
         source.setCreatedAt(LocalDateTime.now());
         source.setUpdatedAt(LocalDateTime.now());
 
