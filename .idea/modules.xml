@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/db-code-generator/db-code-generator.iml" filepath="$PROJECT_DIR$/db-code-generator/db-code-generator.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../../Downloads/Compressed/RSS/feeddy-master/feeddy.iml" filepath="$PROJECT_DIR$/../../Downloads/Compressed/RSS/feeddy-master/feeddy.iml" />
+      <module fileurl="file://$PROJECT_DIR$/rssgo/rssgo.iml" filepath="$PROJECT_DIR$/rssgo/rssgo.iml" />
+    </modules>
+  </component>
+</project>
