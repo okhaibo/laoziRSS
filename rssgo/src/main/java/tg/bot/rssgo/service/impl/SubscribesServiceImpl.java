@@ -1,10 +1,13 @@
 package tg.bot.rssgo.service.impl;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import tg.bot.rssgo.entity.Subscribes;
 import tg.bot.rssgo.mapper.SubscribesMapper;
 import tg.bot.rssgo.service.ISubscribesService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
  * <p>
@@ -16,5 +19,11 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class SubscribesServiceImpl extends ServiceImpl<SubscribesMapper, Subscribes> implements ISubscribesService {
+    @Autowired
+    SubscribesMapper subscribesMapper;
 
+    @Override
+    public List<Long> getChatIDsBySouceId(Integer souceId) {
+        return subscribesMapper.getChatIDsBySouceId(souceId);
+    }
 }

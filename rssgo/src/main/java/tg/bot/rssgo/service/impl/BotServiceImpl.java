@@ -2,15 +2,18 @@ package tg.bot.rssgo.service.impl;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 import org.telegram.telegrambots.meta.TelegramBotsApi;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.send.SendPhoto;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.ForceReplyKeyboard;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import tg.bot.rssgo.entity.TgBot;
 
 import javax.annotation.PostConstruct;
+import java.util.Iterator;
+import java.util.List;
 
 /**
  * @author: HIBO
@@ -22,6 +25,8 @@ import javax.annotation.PostConstruct;
 public class BotServiceImpl {
     @Autowired
     UpdateHandleServiceImpl updateHandleService;
+    @Autowired
+    RssHandleServiceImpl rssHandleService;
 
     @Autowired
     TgBot bot;
@@ -53,6 +58,17 @@ public class BotServiceImpl {
         } catch (TelegramApiException e) {
             log.error(e.getMessage(), e);
             e.printStackTrace();
+        }
+    }
+
+    @Transactional
+    @Scheduled(fixedDelay = 15000) // 1000 = 1s
+    public void sendRssToUsers() {
+        List<SendMessage> msgs = rssHandleService.getAllMessagesForRss();
+        for(Iterator<SendMessage> iter = msgs.iterator(); iter.hasNext();){
+            SendMessage sendMessage = iter.next();
+            sendMessage.enableMarkdown(true).disableWebPagePreview();
+            excute(sendMessage);
         }
     }
 }

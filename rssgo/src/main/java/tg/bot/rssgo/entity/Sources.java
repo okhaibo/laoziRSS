@@ -35,6 +35,8 @@ public class Sources implements Serializable {
 
     private Long userCount;
 
+    private LocalDateTime lastUpdatetime;
+
     private LocalDateTime createdAt;
 
     private LocalDateTime updatedAt;

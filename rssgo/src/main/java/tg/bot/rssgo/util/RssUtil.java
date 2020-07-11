@@ -6,11 +6,13 @@ import com.rometools.rome.feed.synd.SyndFeedImpl;
 import com.rometools.rome.io.SyndFeedInput;
 import com.rometools.rome.io.XmlReader;
 import lombok.extern.slf4j.Slf4j;
-import tg.bot.rssgo.entity.ItemVO;
+import tg.bot.rssgo.entity.ItemPostVO;
 import tg.bot.rssgo.entity.Sources;
 
 import java.net.URL;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -23,17 +25,17 @@ import java.util.stream.Collectors;
 public class RssUtil {
     public static final String LINK_PATTERN = "^(http:\\/\\/www\\.|https:\\/\\/www\\.|http:\\/\\/|https:\\/\\/)?[a-z0-9]+([\\-\\.]{1}[a-z0-9]+)*\\.[a-z]{2,5}(:[0-9]{1,5})?(\\/.*)?$";
 
-    public static ItemVO getLastestPost(String link){
+    public static ItemPostVO getLastestPost(String link){
         SyndFeed feed = getSyndFeed(link);
         SyndEntry lastestEntry = feed.getEntries().get(0);
-        return new ItemVO(lastestEntry.getLink(),lastestEntry.getTitle());
+        return new ItemPostVO(feed.getTitle(), lastestEntry.getLink(), lastestEntry.getTitle(), lastestEntry.getDescription().getValue(),lastestEntry.getPublishedDate().toInstant().atZone(ZoneId.of("UTC+8")).toLocalDateTime(), feed.getPublishedDate().toInstant().atZone(ZoneId.of("UTC+8")).toLocalDateTime());
     }
 
 
-    public static List<ItemVO> getAllNews(String link) {
+    public static List<ItemPostVO> getAllPost(String link) {
         SyndFeed feed = getSyndFeed(link);
         return feed.getEntries().stream()
-                .map(entry -> new ItemVO(entry.getLink(), entry.getTitle()))
+                .map(entry -> new ItemPostVO(feed.getTitle(), entry.getLink(), entry.getTitle(), entry.getDescription().getValue(), entry.getPublishedDate().toInstant().atZone(ZoneId.of("UTC+8")).toLocalDateTime(), feed.getPublishedDate().toInstant().atZone(ZoneId.of("UTC+8")).toLocalDateTime()))
                 .collect(Collectors.toList());
     }
 
@@ -45,7 +47,7 @@ public class RssUtil {
             SyndFeedInput input = new SyndFeedInput();
             syndFeed = input.build(new XmlReader(feedSource));
         }catch (Exception e){
-            log.error(e.getMessage(), e);
+            log.error(e.getMessage()+"网址: "+link + "解析失败", e);
             e.printStackTrace();
         }
         return syndFeed;
@@ -53,12 +55,14 @@ public class RssUtil {
 
     public static Sources getSourceByLink(String link){
         SyndFeed feed = getSyndFeed(link);
+        Date lastUpdateTime = feed.getEntries().get(0).getPublishedDate();
 
         Sources source = new Sources();
         source.setTitle(feed.getTitle());
-        source.setLink(feed.getLink());
+        source.setLink(link);
         source.setErrorCount(0);
         source.setUserCount(1l);
+        source.setLastUpdatetime(lastUpdateTime.toInstant().atZone(ZoneId.of("UTC+8")).toLocalDateTime());
         source.setCreatedAt(LocalDateTime.now());
         source.setUpdatedAt(LocalDateTime.now());
 
