@@ -1,0 +1,13 @@
+spring:
+  profiles:
+    active: dev
+logging:
+  config: classpath:log4j2.xml
+  level:
+    tg.bot.rssgo: debug
+
+mybatis-plus:
+  mapper-locations: classpath*:tg/bot/rssgo/mapper/xml/*.xml
+  type-aliases-package: tg.bot.rssgo.entity
+
+
