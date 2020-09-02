@@ -1,6 +1,6 @@
 package tg.bot.rssgo.service.impl;
 
-import lombok.extern.slf4j.Slf4j;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -18,9 +18,9 @@ import java.util.List;
 /**
  * @author: HIBO
  * @date: 2020-07-09 22:35
- * @description:
+ * @description: bot 服务，实现注册bot，定时任务和发送消息
  */
-@Slf4j
+@Log4j2
 @Component
 public class BotServiceImpl {
     @Autowired
@@ -62,7 +62,7 @@ public class BotServiceImpl {
     }
 
     @Transactional
-    @Scheduled(fixedDelay = 15000) // 1000 = 1s
+    @Scheduled(fixedDelayString = "${bot.delay}") // 1000 = 1s
     public void sendRssToUsers() {
         List<SendMessage> msgs = rssHandleService.getAllMessagesForRss();
         for(Iterator<SendMessage> iter = msgs.iterator(); iter.hasNext();){

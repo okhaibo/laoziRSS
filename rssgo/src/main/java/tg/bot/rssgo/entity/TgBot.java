@@ -2,21 +2,29 @@ package tg.bot.rssgo.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.extern.slf4j.Slf4j;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
+import org.telegram.telegrambots.meta.TelegramBotsApi;
 import org.telegram.telegrambots.meta.api.methods.AnswerCallbackQuery;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
+import org.telegram.telegrambots.meta.api.methods.ParseMode;
+import org.telegram.telegrambots.meta.api.methods.send.SendMediaGroup;
+import org.telegram.telegrambots.meta.api.methods.send.SendPhoto;
 import org.telegram.telegrambots.meta.api.objects.Update;
+import org.telegram.telegrambots.meta.api.objects.media.InputMedia;
+import org.telegram.telegrambots.meta.api.objects.media.InputMediaPhoto;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiRequestException;
 import org.telegram.telegrambots.meta.updateshandlers.SentCallback;
 import tg.bot.rssgo.config.ProxyConfig;
 import tg.bot.rssgo.service.impl.UpdateHandleServiceImpl;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author: HIBO
@@ -24,7 +32,7 @@ import tg.bot.rssgo.service.impl.UpdateHandleServiceImpl;
  * @description:
  */
 
-@Slf4j
+@Log4j2
 @Data
 @Component
 @AllArgsConstructor
@@ -52,6 +60,25 @@ public class TgBot extends TelegramLongPollingBot {
                                 .text(update.getMessage().getText())
                                 .userName(update.getMessage().getChat().getUserName())
                                 .build();
+            SendPhoto photo= new SendPhoto().setChatId(update.getMessage().getChatId())
+                                            .setPhoto("https://gitee.com/okhaibo/picsRepo/raw/master/2.jpg")
+                                            .setCaption("锄禾日当午 \n 汗滴禾下土 \n 谁知盘中餐\n 粒粒皆辛苦")
+                                            .setParseMode(ParseMode.MARKDOWNV2);
+
+            SendMediaGroup myMediaGroup = new SendMediaGroup();
+
+            List<InputMedia> photos = new ArrayList<>();
+            photos.add(new InputMediaPhoto("https://gitee.com/okhaibo/picsRepo/raw/master/2.png", ""));
+            photos.add(new InputMediaPhoto("https://gitee.com/okhaibo/picsRepo/raw/master/9.jpg", ""));
+            photos.add(new InputMediaPhoto("https://gitee.com/okhaibo/picsRepo/raw/master/15.jpg", " 锄禾日当午 \n 汗滴禾下土 \n 谁知盘中餐\n 粒粒皆辛苦").setParseMode(ParseMode.MARKDOWNV2));
+            myMediaGroup.setChatId(update.getMessage().getChatId()).setMedia(photos);
+
+
+            try {
+                execute(myMediaGroup);
+            } catch (TelegramApiException e) {
+                e.printStackTrace();
+            }
         }
 
         if (update.hasCallbackQuery()){

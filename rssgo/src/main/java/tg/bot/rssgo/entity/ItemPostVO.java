@@ -17,11 +17,17 @@ import java.time.LocalDateTime;
 @Getter
 @AllArgsConstructor
 public class ItemPostVO {
+    // RSS 源的标题
     private String sourceTitle;
+    // 单条更新的链接
     private String contentLink;
+    // 单条更新的标题
     private String contentTitle;
+    // 单条更新的内容
     private String contentDescription;
+    // 单条更新的发布时间
     private LocalDateTime itemPublishedTime;
+    // RSS最近更新时间
     private LocalDateTime sourcePublishedTime;
 
     @Override
@@ -34,7 +40,7 @@ public class ItemPostVO {
             sb.append("#Solidot" + " \n " + "*【" + contentTitle + "】*" + " \n\n " + parsedText.replace("![](https://img.solidot.org//0/446/liiLIZF8Uh6yM.jpg)","") + "\n" + "[原文]("+contentLink+")");
         }else {
             //sb.append("#"+ sourceTitle + " \n " + "*【" + contentTitle + "】*" + " \n\n " + parsedText + " \n\n " + "[原文]("+contentLink+")");
-            sb.append("#"+ sourceTitle + " \n\n" + "["+contentTitle+"]("+contentLink+")");
+            sb.append("#"+ sourceTitle + " \n\n" + "[原文]("+contentLink+")");
         }
 
         //System.out.println("#"+ sourceTitle + " \n " + "*【" + contentTitle + "】*" + " \n\n " + parsedText + " \n\n " + "[原文]("+contentLink+")");

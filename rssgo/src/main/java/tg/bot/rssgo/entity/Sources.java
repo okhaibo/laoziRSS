@@ -40,6 +40,4 @@ public class Sources implements Serializable {
     private LocalDateTime createdAt;
 
     private LocalDateTime updatedAt;
-
-
 }

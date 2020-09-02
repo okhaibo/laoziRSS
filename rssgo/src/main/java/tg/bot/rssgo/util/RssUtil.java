@@ -5,7 +5,7 @@ import com.rometools.rome.feed.synd.SyndFeed;
 import com.rometools.rome.feed.synd.SyndFeedImpl;
 import com.rometools.rome.io.SyndFeedInput;
 import com.rometools.rome.io.XmlReader;
-import lombok.extern.slf4j.Slf4j;
+import lombok.extern.log4j.Log4j2;
 import tg.bot.rssgo.entity.ItemPostVO;
 import tg.bot.rssgo.entity.Sources;
 
@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
  * @date: 2020-07-10 11:26
  * @description:
  */
-@Slf4j
+@Log4j2
 public class RssUtil {
     public static final String LINK_PATTERN = "^(http:\\/\\/www\\.|https:\\/\\/www\\.|http:\\/\\/|https:\\/\\/)?[a-z0-9]+([\\-\\.]{1}[a-z0-9]+)*\\.[a-z]{2,5}(:[0-9]{1,5})?(\\/.*)?$";
 

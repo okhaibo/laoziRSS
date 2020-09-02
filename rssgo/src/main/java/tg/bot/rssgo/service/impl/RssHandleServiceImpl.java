@@ -4,7 +4,7 @@ import com.rometools.rome.feed.synd.SyndFeed;
 import com.rometools.rome.feed.synd.SyndFeedImpl;
 import com.rometools.rome.io.SyndFeedInput;
 import com.rometools.rome.io.XmlReader;
-import lombok.extern.slf4j.Slf4j;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -16,7 +16,6 @@ import tg.bot.rssgo.service.ISourcesService;
 import tg.bot.rssgo.service.ISubscribesService;
 import tg.bot.rssgo.util.RssUtil;
 
-import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -26,9 +25,9 @@ import java.util.List;
 /**
  * @author: HIBO
  * @date: 2020-07-10 21:17
- * @description:
+ * @description: 检测和获取RSS更新内容
  */
-@Slf4j
+@Log4j2
 @Component
 public class RssHandleServiceImpl {
     @Value("${bot.errorcount}")
@@ -45,6 +44,7 @@ public class RssHandleServiceImpl {
     public List<SendMessage> getAllMessagesForRss(){
         List<Sources> sourcesList = sourcesService.list();
         List<SendMessage> messageList = new ArrayList<>();
+
         for (Iterator<Sources> iter = sourcesList.iterator(); iter.hasNext();){
             Sources tempSource = iter.next();
             if (tempSource.getErrorCount() <= ERRORCOUNT && checkConnection(tempSource)){
@@ -53,7 +53,6 @@ public class RssHandleServiceImpl {
             }
         }
 
-
         return messageList;
     }
 
@@ -61,12 +60,15 @@ public class RssHandleServiceImpl {
     private List<ItemPostVO> getAllPostAfterLastUpdate(Sources source){
         List<ItemPostVO> allPosts = RssUtil.getAllPost(source.getLink());
         List<ItemPostVO> result = new LinkedList<>();
+
+        // 获取所有新发布的内容
         for (ItemPostVO item : allPosts) {
             if (item.getItemPublishedTime().isBefore(source.getLastUpdatetime())) {
                 break;
             }
             result.add(item);
         }
+
         sourcesService.updateLastUpdateTimeById(source.getId(), allPosts.get(0).getSourcePublishedTime());
         return result;
     }
@@ -91,7 +93,7 @@ public class RssHandleServiceImpl {
             syndFeed = input.build(new XmlReader(feedSource));
             return true;
         }catch (Exception e){
-            log.info("网址: "+link + "解析失败");
+            log.info("网址: "+link + " 获取失败");
             sourcesService.updateErrorCountById(source.getId());
             return false;
         }
