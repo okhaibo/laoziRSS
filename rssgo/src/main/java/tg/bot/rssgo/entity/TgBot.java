@@ -48,12 +48,7 @@ public class TgBot extends TelegramLongPollingBot {
 
     @Override
     public void onUpdateReceived(Update update) {
-        TgUpdate tgUpdate = null;
-        if (update.getMessage() == null && update.getCallbackQuery() == null){
-            return;
-        }
-
-        if (update.hasMessage()){
+        /*if (update.hasMessage()){
             log.info("收到信息： " + update.getMessage().getText());
             tgUpdate = TgUpdate.builder()
                                 .chatId(update.getMessage().getChatId())
@@ -79,18 +74,30 @@ public class TgBot extends TelegramLongPollingBot {
             } catch (TelegramApiException e) {
                 e.printStackTrace();
             }
-        }
+        }*/
 
+        TgUpdate tgUpdate = null;
+        if (update.getMessage() == null && update.getCallbackQuery() == null){
+            return;
+        }
+        if (update.hasMessage()){
+            log.info("收到信息： " + update.getMessage().getText());
+            tgUpdate = TgUpdate.builder()
+                    .chatId(update.getMessage().getChatId())
+                    .text(update.getMessage().getText())
+                    .userName(update.getMessage().getChat().getUserName())
+                    .build();
+        }
         if (update.hasCallbackQuery()){
             log.info("收到回调请求： " + update.getCallbackQuery().getMessage().getText());
             answerCallbackAsync(update.getCallbackQuery().getId());
             tgUpdate = TgUpdate.builder()
-                                .chatId(update.getCallbackQuery().getMessage().getChatId())
-                                .text(update.getCallbackQuery().getMessage().getText())
-                                .userName(update.getCallbackQuery().getMessage().getChat().getUserName())
-                                .data(update.getCallbackQuery().getData())
-                                .isCallbackQuery(true)
-                                .build();
+                    .chatId(update.getCallbackQuery().getMessage().getChatId())
+                    .text(update.getCallbackQuery().getMessage().getText())
+                    .userName(update.getCallbackQuery().getMessage().getChat().getUserName())
+                    .data(update.getCallbackQuery().getData())
+                    .isCallbackQuery(true)
+                    .build();
         }
         updateHandleService.handle(tgUpdate);
     }
