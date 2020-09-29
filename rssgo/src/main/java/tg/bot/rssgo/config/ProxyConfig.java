@@ -1,23 +1,11 @@
 package tg.bot.rssgo.config;
 
-import com.fasterxml.jackson.databind.util.BeanUtil;
 import lombok.extern.log4j.Log4j2;
 import org.apache.http.HttpHost;
 import org.apache.http.client.config.RequestConfig;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.ConfigurableApplicationContext;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
-import org.springframework.ui.context.support.UiApplicationContextUtils;
 import org.telegram.telegrambots.bots.DefaultBotOptions;
-
-import javax.annotation.PostConstruct;
-import java.io.File;
-import java.io.FileReader;
-import java.util.Properties;
 
 /**
  * @author: HIBO

@@ -61,7 +61,7 @@ public class BotServiceImpl {
         }
     }
 
-    @Transactional
+  /*  @Transactional
     @Scheduled(fixedDelayString = "${bot.delay}") // 1000 = 1s
     public void sendRssToUsers() {
         List<SendMessage> msgs = rssHandleService.getAllMessagesForRss();
@@ -70,5 +70,5 @@ public class BotServiceImpl {
             sendMessage.enableMarkdown(true).disableWebPagePreview();
             excute(sendMessage);
         }
-    }
+    }*/
 }
