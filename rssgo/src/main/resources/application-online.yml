@@ -13,4 +13,4 @@ bot:
   token:
   name:
   errorcount: 100
-  delay: 300000 #5min
+  timer: 1 #1min

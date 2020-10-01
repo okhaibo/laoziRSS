@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
  */
 @Log4j2
 public class RssUtil {
-    public static final String LINK_PATTERN = "^(http:\\/\\/www\\.|https:\\/\\/www\\.|http:\\/\\/|https:\\/\\/)?[a-z0-9]+([\\-\\.]{1}[a-z0-9]+)*\\.[a-z]{2,5}(:[0-9]{1,5})?(\\/.*)?$";
+    public static final String LINK_PATTERN = "[a-zA-z]+://[^\\s]*";
 
     public static ItemPostVO getLastestPost(String link){
         SyndFeed feed = getSyndFeed(link);

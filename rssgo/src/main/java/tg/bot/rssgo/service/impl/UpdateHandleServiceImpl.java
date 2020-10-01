@@ -33,6 +33,6 @@ public class UpdateHandleServiceImpl {
     }
 
     public void handle(TgUpdate tgUpdate){
-        botService.excute(resolve(tgUpdate));
+        botService.execute(resolve(tgUpdate));
     }
 }

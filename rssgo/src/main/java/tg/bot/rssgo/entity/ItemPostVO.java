@@ -8,9 +8,9 @@ import tg.bot.rssgo.util.html2md.HTML2Md;
 import java.time.LocalDateTime;
 
 /**
- * @author: HIBO
- * @date: 2020-07-10 13:51
- * @description:
+ * @author HAIBO
+ * @date 2020-07-10 13:51
+ * @description
  */
 
 @Setter
@@ -36,11 +36,11 @@ public class ItemPostVO {
 
         //System.out.println(s);
         String parsedText = HTML2Md.convert(contentDescription, "UTF-8");
-        if (sourceTitle.equals("奇客的资讯，重要的东西")) {
-            sb.append("#Solidot" + " \n " + "*【" + contentTitle + "】*" + " \n\n " + parsedText.replace("![](https://img.solidot.org//0/446/liiLIZF8Uh6yM.jpg)","") + "\n" + "[原文]("+contentLink+")");
+        if (sourceTitle.equals("奇客Solidot–传递最新科技情报")) {
+            sb.append("#Solidot" + " \n " + "*【" + contentTitle + "】*" + " \n\n " + parsedText.replace("![](https://img.solidot.org//0/446/liiLIZF8Uh6yM.jpg)","")  + "[原文]("+contentLink+")");
         }else {
             //sb.append("#"+ sourceTitle + " \n " + "*【" + contentTitle + "】*" + " \n\n " + parsedText + " \n\n " + "[原文]("+contentLink+")");
-            sb.append("#"+ sourceTitle + " \n\n" + "[原文]("+contentLink+")");
+            sb.append("#"+ sourceTitle + " \n " + "*【" + contentTitle + "】*" + " \n\n " + parsedText + " \n\n " + "[原文]("+contentLink+")");;
         }
 
         //System.out.println("#"+ sourceTitle + " \n " + "*【" + contentTitle + "】*" + " \n\n " + parsedText + " \n\n " + "[原文]("+contentLink+")");

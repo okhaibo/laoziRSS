@@ -23,7 +23,7 @@ public class TimerConfig {
 
     public static String getTimerCorn(){
         String str = "0 0/"+timerId+" * * * ?";
-        if (CronSequenceGenerator.isValidExpression(str)) {
+        if (timerId > 0 && timerId <=59 && CronSequenceGenerator.isValidExpression(str)) {
             return str;
         }else {
             log.warn("TimerConfig中cron表达式解析出现问题");

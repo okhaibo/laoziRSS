@@ -11,3 +11,11 @@
  </p>
  
 ![](https://github.com/okhaibo/laoziRSS/raw/master/demo.png)  
+
+**TODO**
+- [x] /sub
+- [x] /unsub
+- [x] /list
+- [x] /timer
+- [x] 支持多种模式消息(纯文字、单图、多图)
+- [ ] 支持telegraph
