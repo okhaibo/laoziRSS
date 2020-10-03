@@ -12,9 +12,9 @@ import tg.bot.rssgo.service.IUsersService;
 import java.time.LocalDateTime;
 
 /**
- * @author: HIBO
- * @date: 2020-07-09 17:04
- * @description:
+ * @author HIBO
+ * @date 2020-07-09 17:04
+ * @description
  */
 @Service
 public class CommandStartImpl implements ICommandService {

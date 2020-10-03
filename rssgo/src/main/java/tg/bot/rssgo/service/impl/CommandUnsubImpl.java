@@ -17,9 +17,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * @author: HIBO
- * @date: 2020-07-09 17:03
- * @description:
+ * @author HIBO
+ * @date 2020-07-09 17:03
+ * @description
  */
 @Service
 public class CommandUnsubImpl  implements ICommandService {
@@ -68,7 +68,7 @@ public class CommandUnsubImpl  implements ICommandService {
         if (text.length() < 6) {
             return false;
         }
-        return text.substring(0,6).equals("/unsub");
+        return text.startsWith("/unsub");
     }
 
     private String getLink(TgUpdate update){

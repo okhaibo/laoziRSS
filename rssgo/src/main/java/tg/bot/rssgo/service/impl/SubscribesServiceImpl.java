@@ -23,7 +23,7 @@ public class SubscribesServiceImpl extends ServiceImpl<SubscribesMapper, Subscri
     SubscribesMapper subscribesMapper;
 
     @Override
-    public List<Long> getChatIDsBySouceId(Integer souceId) {
-        return subscribesMapper.getChatIDsBySouceId(souceId);
+    public List<Long> getChatIDsBySourceId(Integer sourceId) {
+        return subscribesMapper.getChatIDsBySourceId(sourceId);
     }
 }

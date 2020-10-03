@@ -11,13 +11,12 @@ import tg.bot.rssgo.service.ICommandService;
 import tg.bot.rssgo.service.ISourcesService;
 import tg.bot.rssgo.service.ISubscribesService;
 
-import java.util.Iterator;
 import java.util.List;
 
 /**
- * @author: HIBO
- * @date: 2020-07-09 17:04
- * @description:
+ * @author HIBO
+ * @date 2020-07-09 17:04
+ * @description
  */
 @Service
 public class CommandListImpl implements ICommandService {
@@ -33,9 +32,9 @@ public class CommandListImpl implements ICommandService {
         List<Subscribes> subscribesList = subscribesService.list(Wrappers.<Subscribes>lambdaQuery().eq(Subscribes::getChatId, tgUpdate.getChatId()));
         StringBuilder subs = new StringBuilder();
         int i = 1;
-        for (Iterator<Subscribes> iter = subscribesList.iterator(); iter.hasNext();){
-            Sources source = sourcesService.getById(iter.next().getSourceId());
-            subs.append("[[" +i+ "]] ["+ source.getTitle() +"]("+source.getLink()+")\n");
+        for (Subscribes subscribes : subscribesList) {
+            Sources source = sourcesService.getById(subscribes.getSourceId());
+            subs.append("[[" + i + "]] [" + source.getTitle() + "](" + source.getLink() + ")\n");
             i++;
         }
         return new SendMessage(tgUpdate.getChatId(), "老子的订阅列表如下：\n\n" + subs)

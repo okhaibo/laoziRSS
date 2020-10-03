@@ -14,7 +14,6 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiRequestException;
 import org.telegram.telegrambots.meta.updateshandlers.SentCallback;
 import tg.bot.rssgo.config.ProxyConfig;
-import tg.bot.rssgo.entity.TgUpdate;
 import tg.bot.rssgo.service.impl.UpdateHandleServiceImpl;
 
 /**
@@ -64,6 +63,7 @@ public class TgBot extends TelegramLongPollingBot {
                     .isCallbackQuery(true)
                     .build();
         }
+
         updateHandleService.handle(tgUpdate);
     }
 

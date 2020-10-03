@@ -34,16 +34,15 @@ public class ItemPostVO {
     public String toString() {
         StringBuilder sb = new StringBuilder();
 
-        //System.out.println(s);
         String parsedText = HTML2Md.convert(contentDescription, "UTF-8");
         if (sourceTitle.equals("奇客Solidot–传递最新科技情报")) {
-            sb.append("#Solidot" + " \n " + "*【" + contentTitle + "】*" + " \n\n " + parsedText.replace("![](https://img.solidot.org//0/446/liiLIZF8Uh6yM.jpg)","")  + "[原文]("+contentLink+")");
-        }else {
-            //sb.append("#"+ sourceTitle + " \n " + "*【" + contentTitle + "】*" + " \n\n " + parsedText + " \n\n " + "[原文]("+contentLink+")");
-            sb.append("#"+ sourceTitle + " \n " + "*【" + contentTitle + "】*" + " \n\n " + parsedText + " \n\n " + "[原文]("+contentLink+")");;
+            sb.append("#Solidot" + " \n " + "*【" + contentTitle + "】*" + " \n\n " + parsedText.replace("![](https://img.solidot.org//0/446/liiLIZF8Uh6yM.jpg)","")  + "["+contentTitle+"]"+"("+contentLink+")");
+        }else if (contentLink.startsWith("https://weibo.com") || contentLink.startsWith("http://weibo.com")){
+            sb.append((parsedText  + " \n\n "+"#"+ sourceTitle + "  " + "[原文]("+contentLink+")"));
+        }else{
+            sb.append("#"+ sourceTitle + " \n " + "*【" + contentTitle + "】*" + " \n\n " + parsedText + " \n\n " + "["+contentTitle+"]"+"("+contentLink+")");
         }
 
-        //System.out.println("#"+ sourceTitle + " \n " + "*【" + contentTitle + "】*" + " \n\n " + parsedText + " \n\n " + "[原文]("+contentLink+")");
         return sb.toString();
     }
 }

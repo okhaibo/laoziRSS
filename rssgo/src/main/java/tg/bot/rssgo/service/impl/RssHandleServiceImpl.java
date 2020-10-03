@@ -48,8 +48,8 @@ public class RssHandleServiceImpl {
     IContentsService contentsService;
 
     // 用于匹配内容的正则表达式
-    String RE_IMG_PATTERN = new String("<img.*?(?:>|\\/>)");
-    String RE_IMG_SRC_LINK = new String("src=[\\'\\\"]?([^\\'\\\"]*)[\\'\\\"]");
+    String RE_IMG_PATTERN = "<img.*?(?:>|\\/>)";
+    String RE_IMG_SRC_LINK = "src=[\\'\\\"]?([^\\'\\\"]*)[\\'\\\"]";
 
     // 不同类型的消息
     List<SendMessage> textMessageList = new LinkedList<>();
@@ -67,7 +67,7 @@ public class RssHandleServiceImpl {
         for (Sources source : sourcesList) {
             if (source.getErrorCount() <= ERRORCOUNT && checkConnection(source)) {
                 // 获取所有订阅者的chatId，只给订阅了当前RSS源的用户推送更新
-                List<Long> chatIds = subscribesService.getChatIDsBySouceId(source.getId());
+                List<Long> chatIds = subscribesService.getChatIDsBySourceId(source.getId());
 
                 List<ItemPostVO> posts = getAllPostAfterLastUpdate(source);
                 for (ItemPostVO post: posts) {
@@ -93,7 +93,6 @@ public class RssHandleServiceImpl {
      */
     private void createTextMessagesByList(List<Long> chatIds, ItemPostVO post) {
         for (Long id : chatIds) {
-            String s = post.toString();
             textMessageList.add(new SendMessage(id, post.toString()).enableMarkdown(true).disableWebPagePreview());
         }
     }
@@ -109,7 +108,7 @@ public class RssHandleServiceImpl {
             photoMessageList.add(new SendPhoto().setChatId(id)
                                                 .setPhoto(photo.getLink())
                                                 .setCaption(photo.getCaption())
-                                                .setParseMode(ParseMode.MARKDOWNV2));
+                                                .setParseMode(ParseMode.MARKDOWN));
         }
     }
 
@@ -124,11 +123,11 @@ public class RssHandleServiceImpl {
         LinkedList<InputMedia> photos = new LinkedList<>();
         String lastLink = "";
         for (String link: mediaGroup.getLinks()) {
-            photos.add(new InputMediaPhoto(link, ""));
+            photos.add(new InputMediaPhoto(link, "").setParseMode(ParseMode.MARKDOWN));
             lastLink = link;
         }
         photos.removeLast();
-        photos.add(new InputMediaPhoto(lastLink, mediaGroup.getCaption()));
+        photos.add(new InputMediaPhoto(lastLink, mediaGroup.getCaption()).setParseMode(ParseMode.MARKDOWN));
 
         for (Long id : chatIds) {
             SendMediaGroup myMediaGroup = new SendMediaGroup();
@@ -153,7 +152,11 @@ public class RssHandleServiceImpl {
         String parsedText = HTML2Md.convert(caption, "UTF-8");
 
         StringBuilder sb = new StringBuilder();
-        sb.append((parsedText + " \n\n " +  "*【" + post.getContentTitle() + "】*" + " \n\n "+"\\#"+ post.getSourceTitle() + "  "   + "[原文]("+post.getContentLink()+")"));
+        if (post.getContentLink().startsWith("https://weibo.com") || post.getContentLink().startsWith("http://weibo.com")){
+            sb.append((parsedText  + " \n\n "+"#"+ post.getSourceTitle() + "  " + "[原文]("+post.getContentLink()+")"));
+        }else {
+            sb.append((parsedText + " \n\n " + "*【" + post.getContentTitle() + "】*" + " \n\n " + "#" + post.getSourceTitle() + "  " + "[原文](" + post.getContentLink() + ")"));
+        }
 
         return new PhotoPostVO(link, sb.toString());
     }
@@ -182,7 +185,11 @@ public class RssHandleServiceImpl {
         String parsedText = HTML2Md.convert(caption, "UTF-8");
 
         StringBuilder sb = new StringBuilder();
-        sb.append((parsedText + " \n\n " +  "*【" + post.getContentTitle() + "】*" + " \n\n "+"\\#"+ post.getSourceTitle() + "  "   + "[原文]("+post.getContentLink()+")"));
+        if (post.getContentLink().startsWith("https://weibo.com") || post.getContentLink().startsWith("http://weibo.com")){
+            sb.append((parsedText  + " \n\n "+"#"+ post.getSourceTitle() + "  " + "[原文]("+post.getContentLink()+")"));
+        }else{
+            sb.append((parsedText + " \n\n " +  "*【" + post.getContentTitle() + "】*" + " \n\n "+"#"+ post.getSourceTitle() + "  "   + "[原文]("+post.getContentLink()+")"));
+        }
 
         return new MediaGroupPostVO(links, sb.toString());
     }
@@ -193,9 +200,9 @@ public class RssHandleServiceImpl {
      * @description 根据post中图片的数量，确定post的消息类型
      */
     private String getPostType(ItemPostVO post) {
-       /* if (post.getSourceTitle().equals("奇客Solidot–传递最新科技情报")) {
+        if (post.getSourceTitle().equals("奇客Solidot–传递最新科技情报")) {
             return "SendMessage";
-        }*/
+        }
 
         List<String> result = ReUtil.findAll(RE_IMG_PATTERN, post.getContentDescription(), 0, new LinkedList<>());
         if (result.size() == 0){
@@ -209,6 +216,7 @@ public class RssHandleServiceImpl {
 
 
     private List<ItemPostVO> getAllPostAfterLastUpdate(Sources source){
+        log.info("获取更新："+source.getLink());
         List<ItemPostVO> allPosts = RssUtil.getAllPost(source.getLink());
         List<ItemPostVO> result = new LinkedList<>();
 
@@ -235,26 +243,16 @@ public class RssHandleServiceImpl {
             syndFeed = input.build(new XmlReader(feedSource));
             return true;
         }catch (Exception e){
-            log.info("网址: "+link + " 获取失败");
+            log.info("链接更新获取失败: "+link);
             sourcesService.updateErrorCountById(source.getId());
             if(source.getErrorCount() > ERRORCOUNT){
-                log.info("网址: "+link + " 错误次数达到上限，请检查订阅连接是否存在问题");
+
+                log.info("错误次数达到上限，请检查订阅连接是否存在问题: "+link);
             }
             return false;
         }
     }
 
-    public void setTextMessageList(List<SendMessage> textMessageList) {
-        this.textMessageList = textMessageList;
-    }
-
-    public void setPhotoMessageList(List<SendPhoto> photoMessageList) {
-        this.photoMessageList = photoMessageList;
-    }
-
-    public void setMediaGroupMessageList(List<SendMediaGroup> mediaGroupMessageList) {
-        this.mediaGroupMessageList = mediaGroupMessageList;
-    }
 
     public List<SendMessage> getTextMessageList() {
         return textMessageList;

@@ -1,29 +1,16 @@
 package tg.bot.rssgo.service.impl;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import tg.bot.rssgo.config.TimerConfig;
-import tg.bot.rssgo.entity.Sources;
-import tg.bot.rssgo.entity.Subscribes;
 import tg.bot.rssgo.entity.TgUpdate;
 import tg.bot.rssgo.service.ICommandService;
-import tg.bot.rssgo.service.ISourcesService;
-import tg.bot.rssgo.service.ISubscribesService;
-import tg.bot.rssgo.service.IUsersService;
-import tg.bot.rssgo.util.RssUtil;
-
-import java.time.LocalDateTime;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
- * @author: HAIBO
- * @date: 2020-09-29 16:48
- * @description: 更新间隔时间设置，对应命令为 /timer 5
+ * @author HAIBO
+ * @date 2020-09-29 16:48
+ * @description 更新间隔时间设置，对应命令为 /timer 5
  */
 @Log4j2
 @Service

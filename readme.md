@@ -10,12 +10,17 @@
    <img src="https://visitor-badge.glitch.me/badge?page_id=okhaibo.laoziRSS" alt="Coverage Status">
  </p>
  
-![](https://github.com/okhaibo/laoziRSS/raw/master/demo.png)  
-
+ 
 **TODO**
 - [x] /sub
 - [x] /unsub
 - [x] /list
 - [x] /timer
+- [x] 多用户
+- [x] 多订阅源
 - [x] 支持多种模式消息(纯文字、单图、多图)
+- [ ] 微博emoji转换
+- [ ] 数据库可选，目前默认MySQL
 - [ ] 支持telegraph
+ 
+![](https://github.com/okhaibo/laoziRSS/raw/master/demo.png)  

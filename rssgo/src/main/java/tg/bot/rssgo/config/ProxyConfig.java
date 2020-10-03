@@ -8,9 +8,9 @@ import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.DefaultBotOptions;
 
 /**
- * @author: HIBO
- * @date: 2020-07-09 10:41
- * @description:
+ * @author HIBO
+ * @date 2020-07-09 10:41
+ * @description
  */
 @Log4j2
 @Component

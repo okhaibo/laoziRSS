@@ -6,9 +6,9 @@ import org.springframework.scheduling.support.CronSequenceGenerator;
 import org.springframework.stereotype.Component;
 
 /**
- * @author: HAIBO
- * @date: 2020-09-29 16:53
- * @description: 定时更新订阅的设置
+ * @author HAIBO
+ * @date 2020-09-29 16:53
+ * @description 定时更新订阅的设置
  */
 @Log4j2
 @Component

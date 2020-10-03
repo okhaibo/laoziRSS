@@ -1,6 +1,5 @@
 package tg.bot.rssgo.service.impl;
 
-import com.sun.xml.internal.bind.v2.TODO;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.SchedulingConfigurer;
@@ -49,8 +48,6 @@ public class ScheduledTaskImpl implements SchedulingConfigurer {
         }, triggerContext -> {
             // 定时任务触发，可修改定时任务的执行周期
             String cron = TimerConfig.getTimerCorn();
-            // 将这个测试用的定时时间换掉
-            //String cron = "0/25 * * * * ?";
             CronTrigger trigger = new CronTrigger(cron);
             return trigger.nextExecutionTime(triggerContext);
         });

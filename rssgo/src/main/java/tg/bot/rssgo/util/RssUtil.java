@@ -17,18 +17,18 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * @author: HIBO
- * @date: 2020-07-10 11:26
- * @description:
+ * @author HIBO
+ * @date 2020-07-10 11:26
+ * @description
  */
 @Log4j2
 public class RssUtil {
     public static final String LINK_PATTERN = "[a-zA-z]+://[^\\s]*";
 
-    public static ItemPostVO getLastestPost(String link){
+    public static ItemPostVO getLatestPost(String link){
         SyndFeed feed = getSyndFeed(link);
-        SyndEntry lastestEntry = feed.getEntries().get(0);
-        return new ItemPostVO(feed.getTitle(), lastestEntry.getLink(), lastestEntry.getTitle(), lastestEntry.getDescription().getValue(),lastestEntry.getPublishedDate().toInstant().atZone(ZoneId.of("UTC+8")).toLocalDateTime(), feed.getPublishedDate().toInstant().atZone(ZoneId.of("UTC+8")).toLocalDateTime());
+        SyndEntry latestEntry = feed.getEntries().get(0);
+        return new ItemPostVO(feed.getTitle(), latestEntry.getLink(), latestEntry.getTitle(), latestEntry.getDescription().getValue(),latestEntry.getPublishedDate().toInstant().atZone(ZoneId.of("UTC+8")).toLocalDateTime(), feed.getPublishedDate().toInstant().atZone(ZoneId.of("UTC+8")).toLocalDateTime());
     }
 
 
@@ -61,7 +61,7 @@ public class RssUtil {
         source.setTitle(feed.getTitle());
         source.setLink(link);
         source.setErrorCount(0);
-        source.setUserCount(1l);
+        source.setUserCount(1L);
         source.setLastUpdatetime(lastUpdateTime.toInstant().atZone(ZoneId.of("UTC+8")).toLocalDateTime());
         source.setCreatedAt(LocalDateTime.now());
         source.setUpdatedAt(LocalDateTime.now());

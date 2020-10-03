@@ -5,12 +5,9 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
-import org.telegram.telegrambots.meta.api.objects.User;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.ForceReplyKeyboard;
 import tg.bot.rssgo.entity.Sources;
 import tg.bot.rssgo.entity.Subscribes;
 import tg.bot.rssgo.entity.TgUpdate;
-import tg.bot.rssgo.entity.Users;
 import tg.bot.rssgo.service.ICommandService;
 import tg.bot.rssgo.service.ISourcesService;
 import tg.bot.rssgo.service.ISubscribesService;
@@ -22,9 +19,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * @author: HIBO
- * @date: 2020-07-09 17:02
- * @description:
+ * @author HIBO
+ * @date 2020-07-09 17:02
+ * @description
  */
 @Service
 public class CommandSubImpl implements ICommandService {
@@ -94,6 +91,6 @@ public class CommandSubImpl implements ICommandService {
         if (text.length() < 4) {
             return false;
         }
-        return text.substring(0,4).equals("/sub") || text.matches(RssUtil.LINK_PATTERN);
+        return text.startsWith("/sub") || text.matches(RssUtil.LINK_PATTERN);
     }
 }

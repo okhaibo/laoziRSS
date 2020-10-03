@@ -10,9 +10,9 @@ import tg.bot.rssgo.service.ICommandService;
 import java.util.List;
 
 /**
- * @author: HIBO
- * @date: 2020-07-09 18:09
- * @description:
+ * @author HAIBO
+ * @date 2020-07-09 18:09
+ * @description
  */
 
 @Service
