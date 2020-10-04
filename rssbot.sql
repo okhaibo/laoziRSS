@@ -11,7 +11,7 @@
  Target Server Version : 80019
  File Encoding         : 65001
 
- Date: 04/10/2020 15:54:24
+ Date: 04/10/2020 22:42:00
 */
 
 SET NAMES utf8mb4;
@@ -39,7 +39,7 @@ CREATE TABLE `sources`  (
 DROP TABLE IF EXISTS `subscribes`;
 CREATE TABLE `subscribes`  (
   `id` int(0) NOT NULL AUTO_INCREMENT,
-  `chat_id` bigint(0) NULL DEFAULT NULL,
+  `chat_id` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
   `source_id` int(0) NULL DEFAULT NULL,
   `enable_notification` tinyint(0) NULL DEFAULT NULL,
   `enable_telegraph` tinyint(0) NULL DEFAULT NULL,
@@ -57,7 +57,7 @@ DROP TABLE IF EXISTS `users`;
 CREATE TABLE `users`  (
   `id` int(0) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  `chat_id` bigint(0) NULL DEFAULT NULL,
+  `chat_id` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
   `state` tinyint(0) NULL DEFAULT NULL,
   `created_at` datetime(0) NULL DEFAULT NULL,
   `updated_at` datetime(0) NULL DEFAULT NULL,

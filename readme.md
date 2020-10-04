@@ -26,6 +26,11 @@
   * `/list` 获取当前用户的所有订阅
   * `/timer 数字(1-59)` 设置更新频率，如 /timer 5 设置每隔5分钟抓取一次订阅源的更新(默认5分钟) 
   
+  * 频道订阅 `/sub @channelId url`
+  * 频道退订 `/unsub @channelId url`
+  * 频道列表 `/list @channelId`
+  > 必须将bot加入到频道内，并设置为频道的管理员
+  
  ## Demo
  ![](https://github.com/okhaibo/laoziRSS/raw/master/demo1.png)
  
@@ -34,6 +39,8 @@
  ![](https://github.com/okhaibo/laoziRSS/raw/master/demo3.png) 
   
  ![](https://github.com/okhaibo/laoziRSS/raw/master/demo4.png)  
+ 
+ ![](https://github.com/okhaibo/laoziRSS/raw/master/demo5.png)  
   
  
 **TODO**
@@ -46,6 +53,7 @@
 - [x] 支持多种模式消息(纯文字、单图、多图)
 - [x] 微博emoji转换
 - [x] 文字过多的文章截取一部分内容推送
+- [x] 支持频道订阅
 - [ ] 数据库可选，目前默认MySQL
 - [ ] 支持telegraph, instant view
   

@@ -29,7 +29,7 @@ public class Users implements Serializable {
 
     private String name;
 
-    private Long chatId;
+    private String chatId;
 
     private Integer state;
 

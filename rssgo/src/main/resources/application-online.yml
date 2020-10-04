@@ -13,4 +13,5 @@ bot:
   token:
   name:
   errorcount: 100
-  timer: 1 #1min
+  maxword: 800
+  timer: 30 #1min

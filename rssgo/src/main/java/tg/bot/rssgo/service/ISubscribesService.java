@@ -14,5 +14,5 @@ import java.util.List;
  * @since 2020-07-09
  */
 public interface ISubscribesService extends IService<Subscribes> {
-    public List<Long> getChatIDsBySourceId(Integer sourceId);
+    public List<String> getChatIDsBySourceId(Integer sourceId);
 }

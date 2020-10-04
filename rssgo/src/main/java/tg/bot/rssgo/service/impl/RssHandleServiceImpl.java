@@ -19,7 +19,6 @@ import tg.bot.rssgo.entity.ItemPostVO;
 import tg.bot.rssgo.entity.MediaGroupPostVO;
 import tg.bot.rssgo.entity.PhotoPostVO;
 import tg.bot.rssgo.entity.Sources;
-import tg.bot.rssgo.service.IContentsService;
 import tg.bot.rssgo.service.ISourcesService;
 import tg.bot.rssgo.service.ISubscribesService;
 import tg.bot.rssgo.util.EmojiUtil;
@@ -41,14 +40,13 @@ import java.util.List;
 public class RssHandleServiceImpl {
     @Value("${bot.errorcount}")
     private int ERRORCOUNT;
-    public final int MAX_WORD_COUNT=800;
+    @Value("${bot.maxword}")
+    private int MAX_WORD_COUNT;
 
     @Autowired
     ISubscribesService subscribesService;
     @Autowired
     ISourcesService sourcesService;
-    @Autowired
-    IContentsService contentsService;
 
     // 用于匹配内容的正则表达式
     String RE_IMG_PATTERN = "<img.*?(?:>|\\/>)";
@@ -70,7 +68,7 @@ public class RssHandleServiceImpl {
         for (Sources source : sourcesList) {
             if (source.getErrorCount() <= ERRORCOUNT && checkConnection(source)) {
                 // 获取所有订阅者的chatId，只给订阅了当前RSS源的用户推送更新
-                List<Long> chatIds = subscribesService.getChatIDsBySourceId(source.getId());
+                List<String> chatIds = subscribesService.getChatIDsBySourceId(source.getId());
 
                 List<ItemPostVO> posts = getAllPostAfterLastUpdate(source);
                 for (ItemPostVO post: posts) {
@@ -98,8 +96,8 @@ public class RssHandleServiceImpl {
      * @date 2020-10-01 15:33
      * @description 生成纯文字消息
      */
-    private void createTextMessagesByList(List<Long> chatIds, ItemPostVO post) {
-        for (Long id : chatIds) {
+    private void createTextMessagesByList(List<String> chatIds, ItemPostVO post) {
+        for (String id : chatIds) {
             textMessageList.add(new SendMessage(id, post.toString().replace("* ","\\* ")).enableMarkdown(true).disableWebPagePreview());
         }
     }
@@ -109,9 +107,9 @@ public class RssHandleServiceImpl {
      * @date 2020-10-01 15:33
      * @description 生成单图消息
      */
-    private void createPhotoMessagesByList(List<Long> chatIds, ItemPostVO post) {
+    private void createPhotoMessagesByList(List<String> chatIds, ItemPostVO post) {
         PhotoPostVO photo = parsePhotoPost(post);
-        for (Long id : chatIds) {
+        for (String id : chatIds) {
             photoMessageList.add(new SendPhoto().setChatId(id)
                                                 .setPhoto(photo.getLink())
                                                 .setCaption(photo.getCaption())
@@ -124,7 +122,7 @@ public class RssHandleServiceImpl {
      * @date 2020-10-01 15:33
      * @description 生成多图消息
      */
-    private void createMediaGroupMessagesByList(List<Long> chatIds, ItemPostVO post) {
+    private void createMediaGroupMessagesByList(List<String> chatIds, ItemPostVO post) {
 
         MediaGroupPostVO mediaGroup = parseMediaPost(post);
 
@@ -137,7 +135,7 @@ public class RssHandleServiceImpl {
         photos.removeLast();
         photos.add(new InputMediaPhoto(lastLink, mediaGroup.getCaption()).setParseMode(ParseMode.MARKDOWN));
 
-        for (Long id : chatIds) {
+        for (String id : chatIds) {
             SendMediaGroup myMediaGroup = new SendMediaGroup();
             myMediaGroup.setChatId(id).setMedia(photos);
             mediaGroupMessageList.add(myMediaGroup);

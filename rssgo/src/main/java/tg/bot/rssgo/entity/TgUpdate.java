@@ -12,7 +12,7 @@ import lombok.Data;
 @Builder
 @Data
 public class TgUpdate {
-    private Long chatId;
+    private String chatId;
     private String text;
     private String userName;
     private String data;

@@ -21,7 +21,7 @@ import java.util.Map;
 /**
  * @author HIBO
  * @date 2020-07-09 17:02
- * @description
+ * @description /sub
  */
 @Service
 public class CommandSubImpl implements ICommandService {
@@ -30,22 +30,27 @@ public class CommandSubImpl implements ICommandService {
     ISourcesService sourcesService;
     @Autowired
     ISubscribesService subscribesService;
-    @Autowired
-    IUsersService usersService;
 
 
     @Override
     public SendMessage execute(TgUpdate update) {
 
         String text = update.getText();
+        String personalChatId = update.getChatId();
         String link;
-        if (text.matches(RssUtil.LINK_PATTERN)){
-            link = text;
-        }else if (text.length() < 6) {
+        String[] args = text.split(" ");
+        if (args.length==1 && !args[0].matches(RssUtil.LINK_PATTERN)){
             return new SendMessage(update.getChatId(), "快告诉老子要订阅什么网址");
+        }else if (args.length==2){
+            link = args[1].matches(RssUtil.LINK_PATTERN)? args[1]: null;
+        }else if (args.length ==3 && args[1].startsWith("@")){
+            // 频道订阅
+            update.setChatId(args[1]);
+            link = args[2].matches(RssUtil.LINK_PATTERN)? args[2]: null;
         }else {
-            link = text.substring(5);
+            link = text;
         }
+
 
         String resMsg;
         if (link.matches(RssUtil.LINK_PATTERN)){
@@ -53,8 +58,6 @@ public class CommandSubImpl implements ICommandService {
             if (source == null){
                 source = RssUtil.getSourceByLink(link);
                 sourcesService.save(source);
-            }else {
-                sourcesService.addUserCountById(source.getId());
             }
 
 
@@ -74,6 +77,7 @@ public class CommandSubImpl implements ICommandService {
                                              .setUpdatedAt(LocalDateTime.now());
 
                 subscribesService.save(subscribe);
+                sourcesService.addUserCountById(source.getId());
             }
 
             resMsg = "["+source.getTitle()+"]("+ source.getLink()+")"+" 订阅成功，有新内容老子会告诉你的";
@@ -81,7 +85,7 @@ public class CommandSubImpl implements ICommandService {
             resMsg = "这是什么网址，老子不认识";
         }
 
-        return new SendMessage(update.getChatId(), resMsg).enableMarkdown(true)
+        return new SendMessage(personalChatId, resMsg).enableMarkdown(true)
                                                           .disableWebPagePreview();
     }
 

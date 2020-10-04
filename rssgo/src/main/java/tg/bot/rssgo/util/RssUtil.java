@@ -61,7 +61,7 @@ public class RssUtil {
         source.setTitle(feed.getTitle());
         source.setLink(link);
         source.setErrorCount(0);
-        source.setUserCount(1L);
+        source.setUserCount(0L);
         source.setLastUpdatetime(lastUpdateTime.toInstant().atZone(ZoneId.of("UTC+8")).toLocalDateTime());
         source.setCreatedAt(LocalDateTime.now());
         source.setUpdatedAt(LocalDateTime.now());

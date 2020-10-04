@@ -16,5 +16,5 @@ import java.util.List;
  */
 @Component
 public interface SubscribesMapper extends BaseMapper<Subscribes> {
-    public List<Long> getChatIDsBySourceId(Integer sourceId);
+    public List<String> getChatIDsBySourceId(Integer sourceId);
 }

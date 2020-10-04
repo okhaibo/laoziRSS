@@ -27,7 +27,7 @@ public class Subscribes implements Serializable {
     @TableId(value = "id", type = IdType.AUTO)
     private Integer id;
 
-    private Long chatId;
+    private String chatId;
 
     private Integer sourceId;
 

@@ -10,6 +10,7 @@ import tg.bot.rssgo.entity.TgUpdate;
 import tg.bot.rssgo.service.ICommandService;
 import tg.bot.rssgo.service.ISourcesService;
 import tg.bot.rssgo.service.ISubscribesService;
+import tg.bot.rssgo.util.RssUtil;
 
 import java.util.List;
 
@@ -29,6 +30,14 @@ public class CommandListImpl implements ICommandService {
     @Override
     public SendMessage execute(TgUpdate tgUpdate) {
 
+        String text = tgUpdate.getText();
+        String[] args = text.split(" ");
+        String personalChatId = tgUpdate.getChatId();
+        if (args.length == 2 && args[1].startsWith("@")){
+            // 频道订阅
+            tgUpdate.setChatId(args[1]);
+        }
+
         List<Subscribes> subscribesList = subscribesService.list(Wrappers.<Subscribes>lambdaQuery().eq(Subscribes::getChatId, tgUpdate.getChatId()));
         StringBuilder subs = new StringBuilder();
         int i = 1;
@@ -37,13 +46,13 @@ public class CommandListImpl implements ICommandService {
             subs.append("[[" + i + "]] [" + source.getTitle() + "](" + source.getLink() + ")\n");
             i++;
         }
-        return new SendMessage(tgUpdate.getChatId(), "老子的订阅列表如下：\n\n" + subs)
+        return new SendMessage(personalChatId, "老子的订阅列表如下：\n\n" + subs)
                 .enableMarkdown(true)
                 .disableWebPagePreview();
     }
 
     @Override
     public boolean isNeeded(TgUpdate tgUpdate) {
-        return tgUpdate.getText().equals("/list");
+        return tgUpdate.getText().startsWith("/list");
     }
 }
