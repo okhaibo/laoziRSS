@@ -12,12 +12,19 @@
  
  ## 使用
  1. 下载 [release](https://github.com/okhaibo/laoziRSS/releases) 版本的jar包
- 2. 下载 `src/main/resources/application-online.yml` ,并根据实际环境填写里面的内容
- 3. 运行jar包.
+ 2. MySQL数据库内容可下载并导入rssbot.sql
+ 3. 下载 `src/main/resources/application-online.yml` ,并根据实际环境填写里面的内容
+ 4. 将application-online.yml和jar放在同一文件夹下，运行jar包.
  
   > win10 双击可直接运行；其余系统可通过`java -jar rssgo-0.0.1-SNAPSHOT.jar` 运行。
   
   运行成功将生成logs文件夹，可以通过log文件查看服务的运行状况
+  
+  支持命令
+  * `/sub url` 或直接发送url进行订阅
+  * `/unsub url` 退订指定url
+  * `/list` 获取当前用户的所有订阅
+  * `/timer 数字(1-59)` 设置更新频率，如 /timer 5 设置每隔5分钟抓取一次订阅源的更新(默认5分钟) 
  
 **TODO**
 - [x] /sub
@@ -32,4 +39,7 @@
 - [ ] 数据库可选，目前默认MySQL
 - [ ] 支持telegraph, instant view
  
-![](https://github.com/okhaibo/laoziRSS/raw/master/demo.png)  
+![](https://github.com/okhaibo/laoziRSS/raw/master/demo1.png)
+![](https://github.com/okhaibo/laoziRSS/raw/master/demo2.png)  
+![](https://github.com/okhaibo/laoziRSS/raw/master/demo3.png)  
+![](https://github.com/okhaibo/laoziRSS/raw/master/demo4.png)    
