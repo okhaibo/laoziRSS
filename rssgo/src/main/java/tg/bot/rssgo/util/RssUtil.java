@@ -34,7 +34,7 @@ public class RssUtil {
 
     public static List<ItemPostVO> getAllPost(String link) {
         SyndFeed feed = getSyndFeed(link);
-        return feed.getEntries().stream()
+        return feed.getEntries().stream().limit(50)
                 .map(entry -> new ItemPostVO(feed.getTitle(), entry.getLink(), entry.getTitle(), entry.getDescription().getValue(), entry.getPublishedDate().toInstant().atZone(ZoneId.of("UTC+8")).toLocalDateTime(), feed.getPublishedDate().toInstant().atZone(ZoneId.of("UTC+8")).toLocalDateTime()))
                 .collect(Collectors.toList());
     }
@@ -48,7 +48,7 @@ public class RssUtil {
             syndFeed = input.build(new XmlReader(feedSource));
         }catch (Exception e){
             log.error(e.getMessage()+"网址: "+link + "解析失败", e);
-            e.printStackTrace();
+            //e.printStackTrace();
         }
         return syndFeed;
     }

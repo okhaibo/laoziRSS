@@ -19,8 +19,9 @@
 - [x] 多用户
 - [x] 多订阅源
 - [x] 支持多种模式消息(纯文字、单图、多图)
-- [ ] 微博emoji转换
+- [x] 微博emoji转换
+- [x] 文字过多的文章截取一部分内容推送
 - [ ] 数据库可选，目前默认MySQL
-- [ ] 支持telegraph
+- [ ] 支持telegraph, instant view
  
 ![](https://github.com/okhaibo/laoziRSS/raw/master/demo.png)  

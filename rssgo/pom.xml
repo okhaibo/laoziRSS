@@ -80,6 +80,12 @@
             <version>5.4.3</version>
         </dependency>
 
+        <!--<dependency>
+            <groupId>org.telegram</groupId>
+            <artifactId>telegraph</artifactId>
+            <version>1.0</version>
+        </dependency>-->
+
 <!--        &lt;!&ndash; alibaba的druid数据库连接池 &ndash;&gt;
         <dependency>
             <groupId>com.alibaba</groupId>

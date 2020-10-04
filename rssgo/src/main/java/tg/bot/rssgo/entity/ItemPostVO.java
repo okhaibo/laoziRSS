@@ -3,6 +3,9 @@ package tg.bot.rssgo.entity;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
+import tg.bot.rssgo.service.impl.RssHandleServiceImpl;
+import tg.bot.rssgo.util.EmojiUtil;
+import tg.bot.rssgo.util.WordCountUtil;
 import tg.bot.rssgo.util.html2md.HTML2Md;
 
 import java.time.LocalDateTime;
@@ -35,12 +38,18 @@ public class ItemPostVO {
         StringBuilder sb = new StringBuilder();
 
         String parsedText = HTML2Md.convert(contentDescription, "UTF-8");
+
         if (sourceTitle.equals("奇客Solidot–传递最新科技情报")) {
-            sb.append("#Solidot" + " \n " + "*【" + contentTitle + "】*" + " \n\n " + parsedText.replace("![](https://img.solidot.org//0/446/liiLIZF8Uh6yM.jpg)","")  + "["+contentTitle+"]"+"("+contentLink+")");
+            sb.append("#Solidot" + " \n " + "*【" + contentTitle + "】*" + "\n\n " + parsedText.replace("![](https://img.solidot.org//0/446/liiLIZF8Uh6yM.jpg)","")  + "["+contentTitle+"]"+"("+contentLink+")");
         }else if (contentLink.startsWith("https://weibo.com") || contentLink.startsWith("http://weibo.com")){
+            for (String s: EmojiUtil.emojiMap.keySet()) {
+                if (parsedText.contains("["+s+"]")){
+                    parsedText = parsedText.replace("["+s+"]", EmojiUtil.emojiMap.get(s));
+                }
+            }
             sb.append((parsedText  + " \n\n "+"#"+ sourceTitle + "  " + "[原文]("+contentLink+")"));
         }else{
-            sb.append("#"+ sourceTitle + " \n " + "*【" + contentTitle + "】*" + " \n\n " + parsedText + " \n\n " + "["+contentTitle+"]"+"("+contentLink+")");
+            sb.append("#"+ sourceTitle + " \n " + "*【" + contentTitle + "】*" + "\n\n " + parsedText + " \n\n " + "["+contentTitle+"]"+"("+contentLink+")");
         }
 
         return sb.toString();

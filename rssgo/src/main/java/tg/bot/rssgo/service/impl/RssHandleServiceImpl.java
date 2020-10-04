@@ -22,7 +22,9 @@ import tg.bot.rssgo.entity.Sources;
 import tg.bot.rssgo.service.IContentsService;
 import tg.bot.rssgo.service.ISourcesService;
 import tg.bot.rssgo.service.ISubscribesService;
+import tg.bot.rssgo.util.EmojiUtil;
 import tg.bot.rssgo.util.RssUtil;
+import tg.bot.rssgo.util.WordCountUtil;
 import tg.bot.rssgo.util.html2md.HTML2Md;
 
 import java.net.URL;
@@ -39,6 +41,7 @@ import java.util.List;
 public class RssHandleServiceImpl {
     @Value("${bot.errorcount}")
     private int ERRORCOUNT;
+    public final int MAX_WORD_COUNT=800;
 
     @Autowired
     ISubscribesService subscribesService;
@@ -71,7 +74,11 @@ public class RssHandleServiceImpl {
 
                 List<ItemPostVO> posts = getAllPostAfterLastUpdate(source);
                 for (ItemPostVO post: posts) {
-                    switch (getPostType(post)){
+                    // TODO 字数过多，采用 telegraph, 目前只截取前800个字符
+                    if (WordCountUtil.count(post.getContentDescription()) > MAX_WORD_COUNT){
+                        post.setContentDescription(post.getContentDescription().substring(0,MAX_WORD_COUNT));
+                    }
+                    switch (getPostType(post)) {
                         case "SendPhoto":
                             createPhotoMessagesByList(chatIds, post);
                             break;
@@ -93,7 +100,7 @@ public class RssHandleServiceImpl {
      */
     private void createTextMessagesByList(List<Long> chatIds, ItemPostVO post) {
         for (Long id : chatIds) {
-            textMessageList.add(new SendMessage(id, post.toString()).enableMarkdown(true).disableWebPagePreview());
+            textMessageList.add(new SendMessage(id, post.toString().replace("* ","\\* ")).enableMarkdown(true).disableWebPagePreview());
         }
     }
 
@@ -118,6 +125,7 @@ public class RssHandleServiceImpl {
      * @description 生成多图消息
      */
     private void createMediaGroupMessagesByList(List<Long> chatIds, ItemPostVO post) {
+
         MediaGroupPostVO mediaGroup = parseMediaPost(post);
 
         LinkedList<InputMedia> photos = new LinkedList<>();
@@ -153,12 +161,17 @@ public class RssHandleServiceImpl {
 
         StringBuilder sb = new StringBuilder();
         if (post.getContentLink().startsWith("https://weibo.com") || post.getContentLink().startsWith("http://weibo.com")){
+            for (String s: EmojiUtil.emojiMap.keySet()) {
+                if (parsedText.contains("["+s+"]")){
+                    parsedText = parsedText.replace("["+s+"]", EmojiUtil.emojiMap.get(s));
+                }
+            }
             sb.append((parsedText  + " \n\n "+"#"+ post.getSourceTitle() + "  " + "[原文]("+post.getContentLink()+")"));
         }else {
-            sb.append((parsedText + " \n\n " + "*【" + post.getContentTitle() + "】*" + " \n\n " + "#" + post.getSourceTitle() + "  " + "[原文](" + post.getContentLink() + ")"));
+            sb.append((parsedText + " \n\n " + "*【" + post.getContentTitle() + "】*" + "\n\n " + "#" + post.getSourceTitle() + "  " + "[原文](" + post.getContentLink() + ")"));
         }
 
-        return new PhotoPostVO(link, sb.toString());
+        return new PhotoPostVO(link, sb.toString().replace("* ","\\* "));
     }
 
     /**
@@ -186,12 +199,17 @@ public class RssHandleServiceImpl {
 
         StringBuilder sb = new StringBuilder();
         if (post.getContentLink().startsWith("https://weibo.com") || post.getContentLink().startsWith("http://weibo.com")){
+            for (String s: EmojiUtil.emojiMap.keySet()) {
+                if (parsedText.contains("["+s+"]")){
+                    parsedText = parsedText.replace("["+s+"]", EmojiUtil.emojiMap.get(s));
+                }
+            }
             sb.append((parsedText  + " \n\n "+"#"+ post.getSourceTitle() + "  " + "[原文]("+post.getContentLink()+")"));
         }else{
-            sb.append((parsedText + " \n\n " +  "*【" + post.getContentTitle() + "】*" + " \n\n "+"#"+ post.getSourceTitle() + "  "   + "[原文]("+post.getContentLink()+")"));
+            sb.append((parsedText + " \n\n " +  "*【" + post.getContentTitle() + "】*" + "\n\n "+"#"+ post.getSourceTitle() + "  "   + "[原文]("+post.getContentLink()+")"));
         }
 
-        return new MediaGroupPostVO(links, sb.toString());
+        return new MediaGroupPostVO(links, sb.toString().replace("* ","\\* "));
     }
 
     /**
@@ -216,7 +234,7 @@ public class RssHandleServiceImpl {
 
 
     private List<ItemPostVO> getAllPostAfterLastUpdate(Sources source){
-        log.info("获取更新："+source.getLink());
+        log.info(" >>> 获取更新=="+source.getTitle()+"："+source.getLink());
         List<ItemPostVO> allPosts = RssUtil.getAllPost(source.getLink());
         List<ItemPostVO> result = new LinkedList<>();
 
@@ -225,11 +243,13 @@ public class RssHandleServiceImpl {
             if (item.getItemPublishedTime().isBefore(source.getLastUpdatetime())) {
                 break;
             }
+
             result.add(item);
         }
-        // 有更新内容，则刷新数据库中的是最近更新时间
+        // 有更新内容，则刷新数据库中的最近更新时间
         if(result.size()!= 0){
-            sourcesService.updateLastUpdateTimeById(source.getId(), allPosts.get(0).getSourcePublishedTime());
+            log.info(" <<< "+source.getTitle()+"==有"+result.size()+"条更新内容："+source.getLink());
+            sourcesService.updateLastUpdateTimeById(source.getId(), allPosts.get(0).getSourcePublishedTime().plusSeconds(50));
         }
         return result;
     }
@@ -243,7 +263,7 @@ public class RssHandleServiceImpl {
             syndFeed = input.build(new XmlReader(feedSource));
             return true;
         }catch (Exception e){
-            log.info("链接更新获取失败: "+link);
+            log.info(" ERROR <<< 链接更新获取失败: "+link);
             sourcesService.updateErrorCountById(source.getId());
             if(source.getErrorCount() > ERRORCOUNT){
 

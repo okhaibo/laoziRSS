@@ -17,5 +17,4 @@ public class RssGoApplication {
        SpringApplication.run(RssGoApplication.class, args);
        ProxyConfig.setProxy();
    }
-
 }

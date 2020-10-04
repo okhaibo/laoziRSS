@@ -34,15 +34,19 @@ public class ScheduledTaskImpl implements SchedulingConfigurer {
 
 
             for (SendMessage msg : rssHandleService.getTextMessageList()) {
+                log.info("【 === 开始发送文字消息 === 】");
                 botService.execute(msg);
             }
             for (SendPhoto msg : rssHandleService.getPhotoMessageList()) {
+                log.info(" === 开始发送单图消息 === ");
                 botService.execute(msg);
             }
             for (SendMediaGroup msg : rssHandleService.getMediaGroupMessageList()) {
+                log.info(" === 开始发送多图消息 === ");
                 botService.execute(msg);
             }
             // 所有消息执行完后，清空待发送消息列表
+            log.info("消息发送结束");
             rssHandleService.clearMessageList();
 
         }, triggerContext -> {

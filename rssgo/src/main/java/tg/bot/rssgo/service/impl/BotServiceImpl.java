@@ -29,6 +29,7 @@ public class BotServiceImpl {
     public void execute(SendMessage msg){
         try {
             bot.execute(msg);
+
         } catch (TelegramApiException e) {
             log.error(e.getMessage(), e);
             e.printStackTrace();
@@ -40,7 +41,6 @@ public class BotServiceImpl {
             bot.execute(photo);
         } catch (TelegramApiException e) {
             log.error(e.getMessage(), e);
-            e.printStackTrace();
         }
     }
 
