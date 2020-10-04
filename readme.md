@@ -12,7 +12,7 @@
  
  ## 使用
  1. 下载 [release](https://github.com/okhaibo/laoziRSS/releases) 版本的jar包
- 2. MySQL数据库内容可下载并导入rssbot.sql
+ 2. 对于MySQL数据库内容，可下载后导入rssbot.sql
  3. 下载 `src/main/resources/application-online.yml` ,并根据实际环境填写里面的内容
  4. 将application-online.yml和jar放在同一文件夹下，运行jar包.
  
@@ -25,6 +25,16 @@
   * `/unsub url` 退订指定url
   * `/list` 获取当前用户的所有订阅
   * `/timer 数字(1-59)` 设置更新频率，如 /timer 5 设置每隔5分钟抓取一次订阅源的更新(默认5分钟) 
+  
+ ## Demo
+ ![](https://github.com/okhaibo/laoziRSS/raw/master/demo1.png)
+ 
+ ![](https://github.com/okhaibo/laoziRSS/raw/master/demo2.png)  
+ 
+ ![](https://github.com/okhaibo/laoziRSS/raw/master/demo3.png) 
+  
+ ![](https://github.com/okhaibo/laoziRSS/raw/master/demo4.png)  
+  
  
 **TODO**
 - [x] /sub
@@ -38,8 +48,4 @@
 - [x] 文字过多的文章截取一部分内容推送
 - [ ] 数据库可选，目前默认MySQL
 - [ ] 支持telegraph, instant view
- 
-![](https://github.com/okhaibo/laoziRSS/raw/master/demo1.png)
-![](https://github.com/okhaibo/laoziRSS/raw/master/demo2.png)  
-![](https://github.com/okhaibo/laoziRSS/raw/master/demo3.png)  
-![](https://github.com/okhaibo/laoziRSS/raw/master/demo4.png)    
+  
