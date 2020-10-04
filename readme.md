@@ -10,6 +10,14 @@
    <img src="https://visitor-badge.glitch.me/badge?page_id=okhaibo.laoziRSS" alt="Coverage Status">
  </p>
  
+ ## 使用
+ 1. 下载 [release](https://github.com/okhaibo/laoziRSS/releases) 版本的jar包
+ 2. 下载 `src/main/resources/application-online.yml` ,并根据实际环境填写里面的内容
+ 3. 运行jar包.
+ 
+  > win10 双击可直接运行；其余系统可通过`java -jar rssgo-0.0.1-SNAPSHOT.jar` 运行。
+  
+  运行成功将生成logs文件夹，可以通过log文件查看服务的运行状况
  
 **TODO**
 - [x] /sub
