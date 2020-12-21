@@ -12,7 +12,7 @@
  
  ## 使用
  1. 下载 [release](https://github.com/okhaibo/laoziRSS/releases) 版本的jar包
- 2. 对于MySQL数据库内容，可下载后导入rssbot.sql
+ 2. 导入rssbot.sql到MySQL数据库中
  3. 下载 `src/main/resources/application-online.yml` ,并根据实际环境填写里面的内容
  4. 将application-online.yml和jar放在同一文件夹下，运行jar包.
  
@@ -54,6 +54,12 @@
 - [x] 微博emoji转换
 - [x] 文字过多的文章截取一部分内容推送
 - [x] 支持频道订阅
+- [ ] 记录并重发由于握手失败导致发送失败的消息
+- [ ] 整理proxy设置
+- [ ] 添加docker部署
+- [ ] 自定义消息模板
 - [ ] 数据库可选，目前默认MySQL
 - [ ] 支持telegraph, instant view
+- [ ] 批量导入/出订阅源
+
   
