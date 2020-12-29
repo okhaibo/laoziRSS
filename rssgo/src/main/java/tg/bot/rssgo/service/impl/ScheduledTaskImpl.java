@@ -29,24 +29,39 @@ public class ScheduledTaskImpl implements SchedulingConfigurer {
     public void configureTasks(ScheduledTaskRegistrar taskRegistrar) {
         taskRegistrar.addTriggerTask(() -> {
             // 定时任务要执行的内容
-            log.info("【 === 开始获取RSS更新 === 】");
+            log.info("【获取RSS更新】");
             rssHandleService.updateAllMessagesForRss();
 
 
             for (SendMessage msg : rssHandleService.getTextMessageList()) {
-                log.info("【 === 开始发送文字消息 === 】");
+                log.info("【发送文字消息】");
                 botService.execute(msg);
+                try {
+                    Thread.sleep(200);
+                } catch (InterruptedException e) {
+                    log.info(e.getMessage(),e);
+                }
             }
             for (SendPhoto msg : rssHandleService.getPhotoMessageList()) {
-                log.info(" === 开始发送单图消息 === ");
+                log.info("【发送单图消息】");
                 botService.execute(msg);
+                try {
+                    Thread.sleep(200);
+                } catch (InterruptedException e) {
+                    log.info(e.getMessage(),e);
+                }
             }
             for (SendMediaGroup msg : rssHandleService.getMediaGroupMessageList()) {
-                log.info(" === 开始发送多图消息 === ");
+                log.info("【发送多图消息】");
                 botService.execute(msg);
+                try {
+                    Thread.sleep(200);
+                } catch (InterruptedException e) {
+                    log.info(e.getMessage(),e);
+                }
             }
             // 所有消息执行完后，清空待发送消息列表
-            log.info("消息发送结束");
+            log.info("【本次任务结束，等待下次更新】");
             rssHandleService.clearMessageList();
 
         }, triggerContext -> {

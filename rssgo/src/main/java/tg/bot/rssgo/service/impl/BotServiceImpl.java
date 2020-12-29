@@ -32,7 +32,6 @@ public class BotServiceImpl {
 
         } catch (TelegramApiException e) {
             log.error(e.getMessage(), e);
-            e.printStackTrace();
         }
     }
 
@@ -49,7 +48,6 @@ public class BotServiceImpl {
             bot.execute(mediaGroup);
         } catch (TelegramApiException e) {
             log.error(e.getMessage(), e);
-            e.printStackTrace();
         }
     }
 
@@ -58,7 +56,6 @@ public class BotServiceImpl {
             bot.execute(video);
         } catch (TelegramApiException e) {
             log.error(e.getMessage(), e);
-            e.printStackTrace();
         }
     }
 
@@ -67,7 +64,6 @@ public class BotServiceImpl {
             bot.execute(document);
         } catch (TelegramApiException e) {
             log.error(e.getMessage(), e);
-            e.printStackTrace();
         }
     }
 
@@ -79,7 +75,6 @@ public class BotServiceImpl {
             log.info("============== Telegram Bot 注册完成 ==============");
         } catch (TelegramApiException e) {
             log.error(e.getMessage(), e);
-            e.printStackTrace();
         }
     }
 }

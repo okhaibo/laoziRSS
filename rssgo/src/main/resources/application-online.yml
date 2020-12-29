@@ -12,6 +12,6 @@ proxy:
 bot:
   token:
   name:
-  errorcount: 100
-  maxword: 800
-  timer: 30 #1min
+  errorcount: 1000 # 允许订阅源更新错误的最大次数，达到最大次数后将不更新该订阅源
+  maxword: 800 # 最大字数
+  timer: 30 # 1-59抓取频率,单位为分钟
