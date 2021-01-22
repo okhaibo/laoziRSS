@@ -12,6 +12,8 @@ import org.telegram.telegrambots.meta.api.methods.send.SendPhoto;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import tg.bot.rssgo.config.TimerConfig;
 
+import java.util.Stack;
+
 
 /**
  * @author HAIBO
@@ -32,10 +34,15 @@ public class ScheduledTaskImpl implements SchedulingConfigurer {
             // 定时任务要执行的内容
             log.info("【获取RSS更新】");
             rssHandleService.updateAllMessagesForRss();
+            Stack<SendMessage> textMessageStack = rssHandleService.getTextMessageStack();
+            Stack<SendPhoto> photoMessageStack = rssHandleService.getPhotoMessageStack();
+            Stack<SendMediaGroup> mediaGroupMessageStack = rssHandleService.getMediaGroupMessageStack();
 
+            //TODO 发送失败的消息，下次继续发送
 
-            for (SendMessage msg : rssHandleService.getTextMessageList()) {
-                log.info("【发送文字消息】");
+            while (!textMessageStack.empty()) {
+                SendMessage msg = textMessageStack.pop();
+                log.info("发送文字消息 ==> ");
                 try {
                     botService.execute(msg);
                     Thread.sleep(100);
@@ -45,8 +52,9 @@ public class ScheduledTaskImpl implements SchedulingConfigurer {
                     log.info(e.getMessage(),e);
                 }
             }
-            for (SendPhoto msg : rssHandleService.getPhotoMessageList()) {
-                log.info("【发送单图消息】");
+            while (!photoMessageStack.empty()) {
+                SendPhoto msg = photoMessageStack.pop();
+                log.info("发送单图消息 ==> ");
                 try {
                     botService.execute(msg);
                     Thread.sleep(100);
@@ -56,8 +64,9 @@ public class ScheduledTaskImpl implements SchedulingConfigurer {
                     log.info(e.getMessage(),e);
                 }
             }
-            for (SendMediaGroup msg : rssHandleService.getMediaGroupMessageList()) {
-                log.info("【发送多图消息】");
+            while (!mediaGroupMessageStack.empty()) {
+                SendMediaGroup msg = mediaGroupMessageStack.pop();
+                log.info("发送多图消息 ==> ");
                 try {
                     botService.execute(msg);
                     Thread.sleep(100);
@@ -69,7 +78,6 @@ public class ScheduledTaskImpl implements SchedulingConfigurer {
             }
             // 所有消息执行完后，清空待发送消息列表
             log.info("【本次任务结束，等待下次更新】");
-            rssHandleService.clearMessageList();
 
         }, triggerContext -> {
             // 定时任务触发，可修改定时任务的执行周期

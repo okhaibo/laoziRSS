@@ -29,6 +29,7 @@ import tg.bot.rssgo.util.html2md.HTML2Md;
 import java.net.URL;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Stack;
 
 /**
  * @author HAIBO
@@ -53,9 +54,9 @@ public class RssHandleServiceImpl {
     String RE_IMG_SRC_LINK = "src=[\\'\\\"]?([^\\'\\\"]*)[\\'\\\"]";
 
     // 不同类型的消息
-    List<SendMessage> textMessageList = new LinkedList<>();
-    List<SendPhoto> photoMessageList = new LinkedList<>();
-    List<SendMediaGroup> mediaGroupMessageList =new LinkedList<>();
+    Stack<SendMessage> textMessageStack = new Stack<>();
+    Stack<SendPhoto> photoMessageStack = new Stack<>();
+    Stack<SendMediaGroup> mediaGroupMessageStack = new Stack<>();
 
     /**
      * @author HAIBO
@@ -98,7 +99,7 @@ public class RssHandleServiceImpl {
      */
     private void createTextMessagesByList(List<String> chatIds, ItemPostVO post) {
         for (String id : chatIds) {
-            textMessageList.add(new SendMessage(id, post.toString().replace("* ","\\* ")).enableMarkdown(true).disableWebPagePreview());
+            textMessageStack.push(new SendMessage(id, post.toString().replace("* ","\\* ")).enableMarkdown(true).disableWebPagePreview());
         }
     }
 
@@ -110,7 +111,7 @@ public class RssHandleServiceImpl {
     private void createPhotoMessagesByList(List<String> chatIds, ItemPostVO post) {
         PhotoPostVO photo = parsePhotoPost(post);
         for (String id : chatIds) {
-            photoMessageList.add(new SendPhoto().setChatId(id)
+            photoMessageStack.push(new SendPhoto().setChatId(id)
                                                 .setPhoto(photo.getLink())
                                                 .setCaption(photo.getCaption())
                                                 .setParseMode(ParseMode.MARKDOWN));
@@ -138,7 +139,7 @@ public class RssHandleServiceImpl {
         for (String id : chatIds) {
             SendMediaGroup myMediaGroup = new SendMediaGroup();
             myMediaGroup.setChatId(id).setMedia(photos);
-            mediaGroupMessageList.add(myMediaGroup);
+            mediaGroupMessageStack.push(myMediaGroup);
         }
     }
 
@@ -272,21 +273,15 @@ public class RssHandleServiceImpl {
     }
 
 
-    public List<SendMessage> getTextMessageList() {
-        return textMessageList;
+    public Stack<SendMessage> getTextMessageStack() {
+        return textMessageStack;
     }
 
-    public List<SendPhoto> getPhotoMessageList() {
-        return photoMessageList;
+    public Stack<SendPhoto> getPhotoMessageStack() {
+        return photoMessageStack;
     }
 
-    public List<SendMediaGroup> getMediaGroupMessageList() {
-        return mediaGroupMessageList;
-    }
-
-    public void clearMessageList(){
-        textMessageList.clear();
-        photoMessageList.clear();
-        mediaGroupMessageList.clear();
+    public Stack<SendMediaGroup> getMediaGroupMessageStack() {
+        return mediaGroupMessageStack;
     }
 }
