@@ -19,9 +19,9 @@ public class ProxyConfig {
     /*@Value("${proxy.host}")
     private static String proxyHost;*/
 
-
     public static String proxyHost;
     public static String proxyPort;
+    public static Integer proxyEnable;
 
     @Value("${proxy.host}")
     public void setProxyHost(String host) {
@@ -33,8 +33,16 @@ public class ProxyConfig {
         proxyPort = port;
     }
 
+    @Value("${proxy.enable}")
+    public void setProxyEnable(Integer enable){
+        proxyEnable = enable;
+    }
+
 
     public static void setProxy(){
+        if (proxyEnable==0){
+            return;
+        }
         if (proxyHost == null || proxyPort == null){
             log.error(" proxy 配置为 null ");
         }
@@ -47,11 +55,13 @@ public class ProxyConfig {
     }
 
     public static DefaultBotOptions getProxyOptions(){
-        //代理
-        HttpHost proxy = new HttpHost(proxyHost, Integer.parseInt(proxyPort));
-        RequestConfig config = RequestConfig.custom().setProxy(proxy).build();
         DefaultBotOptions options = new DefaultBotOptions();
-        options.setRequestConfig(config);
+        //代理
+        if (proxyEnable==1){
+            HttpHost proxy = new HttpHost(proxyHost, Integer.parseInt(proxyPort));
+            RequestConfig config = RequestConfig.custom().setProxy(proxy).build();
+            options.setRequestConfig(config);
+        }
         return options;
     }
 }

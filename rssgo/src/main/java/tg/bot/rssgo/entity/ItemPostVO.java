@@ -41,7 +41,7 @@ public class ItemPostVO {
 
         if (sourceTitle.equals("奇客Solidot–传递最新科技情报")) {
             sb.append("#Solidot" + " \n " + "*【" + contentTitle + "】*" + "\n\n " + parsedText.replace("![](https://img.solidot.org//0/446/liiLIZF8Uh6yM.jpg)","")  + "["+contentTitle+"]"+"("+contentLink+")");
-        }else if (contentLink.startsWith("https://weibo.com") || contentLink.startsWith("http://weibo.com")){
+        }else if (contentLink.startsWith("https://weibo.com") || contentLink.startsWith("http://weibo.com")||contentLink.startsWith("https://m.okjike.com") || contentLink.startsWith("http://m.okjike.com")){
             for (String s: EmojiUtil.emojiMap.keySet()) {
                 if (parsedText.contains("["+s+"]")){
                     parsedText = parsedText.replace("["+s+"]", EmojiUtil.emojiMap.get(s));

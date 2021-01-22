@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMediaGroup;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.send.SendPhoto;
+import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import tg.bot.rssgo.config.TimerConfig;
 
 
@@ -35,27 +36,33 @@ public class ScheduledTaskImpl implements SchedulingConfigurer {
 
             for (SendMessage msg : rssHandleService.getTextMessageList()) {
                 log.info("【发送文字消息】");
-                botService.execute(msg);
                 try {
-                    Thread.sleep(200);
+                    botService.execute(msg);
+                    Thread.sleep(100);
+                } catch (TelegramApiException e) {
+                    log.error(e.getMessage(), e);
                 } catch (InterruptedException e) {
                     log.info(e.getMessage(),e);
                 }
             }
             for (SendPhoto msg : rssHandleService.getPhotoMessageList()) {
                 log.info("【发送单图消息】");
-                botService.execute(msg);
                 try {
-                    Thread.sleep(200);
+                    botService.execute(msg);
+                    Thread.sleep(100);
+                } catch (TelegramApiException e) {
+                    log.error(e.getMessage(),e);
                 } catch (InterruptedException e) {
                     log.info(e.getMessage(),e);
                 }
             }
             for (SendMediaGroup msg : rssHandleService.getMediaGroupMessageList()) {
                 log.info("【发送多图消息】");
-                botService.execute(msg);
                 try {
-                    Thread.sleep(200);
+                    botService.execute(msg);
+                    Thread.sleep(100);
+                } catch (TelegramApiException e) {
+                    log.error(e.getMessage(),e);
                 } catch (InterruptedException e) {
                     log.info(e.getMessage(),e);
                 }

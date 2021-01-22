@@ -74,7 +74,7 @@ public class RssHandleServiceImpl {
                 for (ItemPostVO post: posts) {
                     // TODO 字数过多，采用 telegraph, 目前只截取前800个字符
                     if (WordCountUtil.count(post.getContentDescription()) > MAX_WORD_COUNT){
-                        post.setContentDescription(post.getContentDescription().substring(0,MAX_WORD_COUNT));
+                        post.setContentDescription(post.getContentDescription().substring(0,MAX_WORD_COUNT)+"===内容长度超限，完整内容请看原文===");
                     }
                     switch (getPostType(post)) {
                         case "SendPhoto":
@@ -158,7 +158,7 @@ public class RssHandleServiceImpl {
         String parsedText = HTML2Md.convert(caption, "UTF-8");
 
         StringBuilder sb = new StringBuilder();
-        if (post.getContentLink().startsWith("https://weibo.com") || post.getContentLink().startsWith("http://weibo.com")){
+        if (post.getContentLink().startsWith("https://weibo.com") || post.getContentLink().startsWith("http://weibo.com")||post.getContentLink().startsWith("https://m.okjike.com") || post.getContentLink().startsWith("http://m.okjike.com")){
             for (String s: EmojiUtil.emojiMap.keySet()) {
                 if (parsedText.contains("["+s+"]")){
                     parsedText = parsedText.replace("["+s+"]", EmojiUtil.emojiMap.get(s));
@@ -196,7 +196,7 @@ public class RssHandleServiceImpl {
         String parsedText = HTML2Md.convert(caption, "UTF-8");
 
         StringBuilder sb = new StringBuilder();
-        if (post.getContentLink().startsWith("https://weibo.com") || post.getContentLink().startsWith("http://weibo.com")){
+        if (post.getContentLink().startsWith("https://weibo.com") || post.getContentLink().startsWith("http://weibo.com")||post.getContentLink().startsWith("https://m.okjike.com") || post.getContentLink().startsWith("http://m.okjike.com")){
             for (String s: EmojiUtil.emojiMap.keySet()) {
                 if (parsedText.contains("["+s+"]")){
                     parsedText = parsedText.replace("["+s+"]", EmojiUtil.emojiMap.get(s));

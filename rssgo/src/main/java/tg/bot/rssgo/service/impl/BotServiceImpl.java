@@ -26,45 +26,24 @@ public class BotServiceImpl {
     @Autowired
     TgBot bot;
 
-    public void execute(SendMessage msg){
-        try {
-            bot.execute(msg);
-
-        } catch (TelegramApiException e) {
-            log.error(e.getMessage(), e);
-        }
+    public void execute(SendMessage msg) throws TelegramApiException {
+        bot.execute(msg);
     }
 
-    public void execute(SendPhoto photo){
-        try {
-            bot.execute(photo);
-        } catch (TelegramApiException e) {
-            log.error(e.getMessage(), e);
-        }
+    public void execute(SendPhoto photo) throws TelegramApiException {
+        bot.execute(photo);
     }
 
-    public void execute(SendMediaGroup mediaGroup){
-        try {
-            bot.execute(mediaGroup);
-        } catch (TelegramApiException e) {
-            log.error(e.getMessage(), e);
-        }
+    public void execute(SendMediaGroup mediaGroup) throws TelegramApiException {
+        bot.execute(mediaGroup);
     }
 
-    public void execute(SendVideo video){
-        try {
-            bot.execute(video);
-        } catch (TelegramApiException e) {
-            log.error(e.getMessage(), e);
-        }
+    public void execute(SendVideo video) throws TelegramApiException {
+        bot.execute(video);
     }
 
-    public void execute(SendDocument document){
-        try {
-            bot.execute(document);
-        } catch (TelegramApiException e) {
-            log.error(e.getMessage(), e);
-        }
+    public void execute(SendDocument document) throws TelegramApiException {
+        bot.execute(document);
     }
 
     @PostConstruct

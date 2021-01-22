@@ -1,6 +1,6 @@
 spring:
   profiles:
-    active: dev
+    active: online
 logging:
   config: classpath:log4j2.xml
   level:

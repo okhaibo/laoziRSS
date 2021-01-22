@@ -35,7 +35,7 @@ public class CommandStartImpl implements ICommandService {
             usersService.save(user);
         }
 
-        return new SendMessage(tgUpdate.getChatId(), user.getName() + "，你可算来了. \n老子在此等候多时");
+        return new SendMessage(tgUpdate.getChatId(), user.getName() + " \n老子在此等候多时");
     }
 
     @Override

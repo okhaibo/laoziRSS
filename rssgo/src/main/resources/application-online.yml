@@ -6,12 +6,13 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
 
 proxy:
+  enable: 1 # 0或1，0为不需要代理；若为1，请填写后续的host和port
   host: 127.0.0.1
   port: 7890
 
 bot:
   token:
   name:
-  errorcount: 1000 # 允许订阅源更新错误的最大次数，达到最大次数后将不更新该订阅源
+  errorcount: 10000 # 允许订阅源更新错误的最大次数，达到最大次数后将不更新该订阅源
   maxword: 800 # 最大字数
-  timer: 30 # 1-59抓取频率,单位为分钟
+  timer: 20 # 1-59抓取频率,单位为分钟

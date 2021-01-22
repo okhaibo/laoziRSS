@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class TimerConfig {
     public static int timerId;
-    public static int DEFAULT_TIMER_ID=5;
+    public static int DEFAULT_TIMER_ID=10;
 
     @Value("${bot.timer}")
     public void setProxyHost(int timer) {
