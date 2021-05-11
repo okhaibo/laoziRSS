@@ -79,34 +79,31 @@
             <artifactId>hutool-all</artifactId>
             <version>5.4.3</version>
         </dependency>
-
-        <!--<dependency>
-            <groupId>org.telegram</groupId>
-            <artifactId>telegraph</artifactId>
-            <version>1.0</version>
-        </dependency>-->
-
-<!--        &lt;!&ndash; alibaba的druid数据库连接池 &ndash;&gt;
-        <dependency>
-            <groupId>com.alibaba</groupId>
-            <artifactId>druid-spring-boot-starter</artifactId>
-            <version>1.1.10</version>
-        </dependency>-->
     </dependencies>
 
     <build>
-        <resources>
-            <resource>
-                <directory>src/main/java</directory>
-                <includes>
-                    <include>**/*.xml</include>
-                </includes>
-            </resource>
-        </resources>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <excludes>
+                        <exclude>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok</artifactId>
+                        </exclude>
+                    </excludes>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <configuration>
+                    <excludes>
+                        <exclude>**/application-online.yml</exclude>
+                        <exclude>**/application-dev.yml</exclude>
+                    </excludes>
+                </configuration>
             </plugin>
         </plugins>
     </build>

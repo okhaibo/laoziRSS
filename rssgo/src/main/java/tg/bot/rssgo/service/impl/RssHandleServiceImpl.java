@@ -68,12 +68,14 @@ public class RssHandleServiceImpl {
 
         for (Sources source : sourcesList) {
             if (source.getErrorCount() <= ERRORCOUNT && checkConnection(source)) {
+                List<ItemPostVO> posts = getAllPostAfterLastUpdate(source);
+                if (posts.size() == 0){
+                    continue;
+                }
                 // 获取所有订阅者的chatId，只给订阅了当前RSS源的用户推送更新
                 List<String> chatIds = subscribesService.getChatIDsBySourceId(source.getId());
-
-                List<ItemPostVO> posts = getAllPostAfterLastUpdate(source);
                 for (ItemPostVO post: posts) {
-                    // TODO 字数过多，采用 telegraph, 目前只截取前800个字符
+
                     if (WordCountUtil.count(post.getContentDescription()) > MAX_WORD_COUNT){
                         post.setContentDescription(post.getContentDescription().substring(0,MAX_WORD_COUNT)+"===内容长度超限，完整内容请看原文===");
                     }
@@ -237,6 +239,9 @@ public class RssHandleServiceImpl {
         List<ItemPostVO> allPosts = RssUtil.getAllPost(source.getLink());
         List<ItemPostVO> result = new LinkedList<>();
 
+        if (allPosts==null || allPosts.size()==0){
+            return result;
+        }
         // 获取所有新发布的内容
         for (ItemPostVO item : allPosts) {
             if (item.getItemPublishedTime().isBefore(source.getLastUpdatetime())) {
@@ -265,7 +270,6 @@ public class RssHandleServiceImpl {
             log.info(" ERROR <<< 链接更新获取失败: "+link);
             sourcesService.updateErrorCountById(source.getId());
             if(source.getErrorCount() > ERRORCOUNT){
-
                 log.info("错误次数达到上限，请检查订阅连接是否存在问题: "+link);
             }
             return false;

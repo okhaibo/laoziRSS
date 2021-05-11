@@ -32,14 +32,13 @@ public class ScheduledTaskImpl implements SchedulingConfigurer {
     public void configureTasks(ScheduledTaskRegistrar taskRegistrar) {
         taskRegistrar.addTriggerTask(() -> {
             // 定时任务要执行的内容
-            log.info("【获取RSS更新】");
+            log.info("【开始获取RSS更新】");
             rssHandleService.updateAllMessagesForRss();
             Stack<SendMessage> textMessageStack = rssHandleService.getTextMessageStack();
             Stack<SendPhoto> photoMessageStack = rssHandleService.getPhotoMessageStack();
             Stack<SendMediaGroup> mediaGroupMessageStack = rssHandleService.getMediaGroupMessageStack();
 
             //TODO 发送失败的消息，下次继续发送
-
             while (!textMessageStack.empty()) {
                 SendMessage msg = textMessageStack.pop();
                 log.info("发送文字消息 ==> ");
@@ -47,7 +46,7 @@ public class ScheduledTaskImpl implements SchedulingConfigurer {
                     botService.execute(msg);
                     Thread.sleep(100);
                 } catch (TelegramApiException e) {
-                    log.error(e.getMessage(), e);
+                    log.error(e.getMessage()+"原文为："+msg.getText(), e);
                 } catch (InterruptedException e) {
                     log.info(e.getMessage(),e);
                 }
@@ -59,7 +58,7 @@ public class ScheduledTaskImpl implements SchedulingConfigurer {
                     botService.execute(msg);
                     Thread.sleep(100);
                 } catch (TelegramApiException e) {
-                    log.error(e.getMessage(),e);
+                    log.error(e.getMessage()+"原文为："+msg.getPhoto().toString()+msg.getCaption(),e);
                 } catch (InterruptedException e) {
                     log.info(e.getMessage(),e);
                 }
@@ -71,7 +70,7 @@ public class ScheduledTaskImpl implements SchedulingConfigurer {
                     botService.execute(msg);
                     Thread.sleep(100);
                 } catch (TelegramApiException e) {
-                    log.error(e.getMessage(),e);
+                    log.error(e.getMessage()+"原文为："+msg.getMedia().toString(),e);
                 } catch (InterruptedException e) {
                     log.info(e.getMessage(),e);
                 }

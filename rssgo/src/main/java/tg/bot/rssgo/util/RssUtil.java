@@ -34,9 +34,15 @@ public class RssUtil {
 
     public static List<ItemPostVO> getAllPost(String link) {
         SyndFeed feed = getSyndFeed(link);
-        return feed.getEntries().stream().limit(50)
-                .map(entry -> new ItemPostVO(feed.getTitle(), entry.getLink(), entry.getTitle(), entry.getDescription().getValue(), entry.getPublishedDate().toInstant().atZone(ZoneId.of("UTC+8")).toLocalDateTime(), feed.getPublishedDate().toInstant().atZone(ZoneId.of("UTC+8")).toLocalDateTime()))
-                .collect(Collectors.toList());
+        List<ItemPostVO> postVOList = null;
+        try{
+            postVOList = feed.getEntries().stream().limit(50)
+                    .map(entry -> new ItemPostVO(feed.getTitle(), entry.getLink(), entry.getTitle(), entry.getDescription().getValue(), entry.getPublishedDate().toInstant().atZone(ZoneId.of("UTC+8")).toLocalDateTime(), feed.getPublishedDate().toInstant().atZone(ZoneId.of("UTC+8")).toLocalDateTime()))
+                    .collect(Collectors.toList());
+        }catch (Exception e){
+            log.error(e.getMessage()+"网址: "+link + "获取更新失败",e);
+        }
+        return postVOList;
     }
 
 
@@ -48,7 +54,6 @@ public class RssUtil {
             syndFeed = input.build(new XmlReader(feedSource));
         }catch (Exception e){
             log.error(e.getMessage()+"网址: "+link + "解析失败", e);
-            //e.printStackTrace();
         }
         return syndFeed;
     }
