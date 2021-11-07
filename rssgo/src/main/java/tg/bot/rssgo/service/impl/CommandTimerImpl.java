@@ -32,9 +32,10 @@ public class CommandTimerImpl implements ICommandService {
         }
 
         String resMsg =  "知道了，老子每隔"+TimerConfig.timerId+"分钟会帮你看看有没有更新";
-
-        return new SendMessage(update.getChatId(), resMsg).enableMarkdown(true)
-                                                          .disableWebPagePreview();
+        SendMessage msg = new SendMessage(update.getChatId(), resMsg);
+        msg.enableMarkdown(true);
+        msg.disableWebPagePreview();
+        return msg;
     }
 
     @Override

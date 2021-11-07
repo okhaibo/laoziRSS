@@ -71,10 +71,10 @@ public class CommandUnsubImpl  implements ICommandService {
         }else {
             sourcesService.delUserCountById(source.getId());
         }
-
-        return new SendMessage(personalChatId, "["+source.getTitle()+"]("+ source.getLink()+")"+" 老子帮你退订成功了")
-                .enableMarkdown(true)
-                .disableWebPagePreview();
+        SendMessage msg = new SendMessage(personalChatId, "["+source.getTitle()+"]("+ source.getLink()+")"+" 老子帮你退订成功了");
+        msg.enableMarkdown(true);
+        msg.disableWebPagePreview();
+        return msg;
     }
 
     @Override

@@ -3,9 +3,11 @@ package tg.bot.rssgo.service.impl;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.telegram.telegrambots.meta.api.methods.groupadministration.GetChatAdministrators;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import tg.bot.rssgo.entity.Sources;
 import tg.bot.rssgo.entity.Subscribes;
+import tg.bot.rssgo.entity.TgBot;
 import tg.bot.rssgo.entity.TgUpdate;
 import tg.bot.rssgo.service.ICommandService;
 import tg.bot.rssgo.service.ISourcesService;
@@ -46,9 +48,10 @@ public class CommandListImpl implements ICommandService {
             subs.append("[[" + i + "]] [" + source.getTitle() + "](" + source.getLink() + ")\n");
             i++;
         }
-        return new SendMessage(personalChatId, "老子的订阅列表如下：\n\n" + subs)
-                .enableMarkdown(true)
-                .disableWebPagePreview();
+        SendMessage msg = new SendMessage(personalChatId, "老子的订阅列表如下：\n\n" + subs);
+        msg.enableMarkdown(true);
+        msg.disableWebPagePreview();
+        return msg;
     }
 
     @Override

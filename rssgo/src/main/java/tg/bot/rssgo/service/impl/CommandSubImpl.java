@@ -84,9 +84,10 @@ public class CommandSubImpl implements ICommandService {
         }else {
             resMsg = "这是什么网址，老子不认识";
         }
-
-        return new SendMessage(personalChatId, resMsg).enableMarkdown(true)
-                                                          .disableWebPagePreview();
+        SendMessage msg = new SendMessage(personalChatId, resMsg);
+        msg.enableMarkdown(true);
+        msg.disableWebPagePreview();
+        return msg;
     }
 
     @Override

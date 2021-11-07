@@ -28,6 +28,16 @@ public class UpdateHandleServiceImpl {
 
 
     private SendMessage resolve(TgUpdate tgUpdate){
+        String text = tgUpdate.getText();
+        String[] args = text.split(" ");
+        String personalChatId = tgUpdate.getChatId();
+        if (args.length >= 2 && args[1].startsWith("@") && (!botService.isGroupAdmin(args[1], personalChatId))){
+            // 非管理员角色操作频道
+            SendMessage msg = new SendMessage(personalChatId, "兄弟别搞事，你不是管理员." );
+            msg.enableMarkdown(true);
+            msg.disableWebPagePreview();
+            return msg;
+        }
         return commandServices.stream()
                                 .filter(commandServices -> commandServices.isNeeded(tgUpdate))
                                 .findFirst()
